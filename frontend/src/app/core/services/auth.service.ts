@@ -33,7 +33,14 @@ export class AuthService {
     private readonly router: Router,
   ) {}
 
-  register(payload: { fullName: string; email: string; password: string }): Observable<RegisterResponse> {
+  register(payload: {
+    fullName: string;
+    email: string;
+    password: string;
+    phone: string;
+    dni: string;
+    birthDate: string;
+  }): Observable<RegisterResponse> {
     return this.http.post<RegisterResponse>(`${environment.apiUrl}/auth/register`, payload);
   }
 
@@ -51,6 +58,21 @@ export class AuthService {
 
   resendVerification(email: string): Observable<MessageResponse> {
     return this.http.post<MessageResponse>(`${environment.apiUrl}/auth/resend-verification`, { email });
+  }
+
+  forgotPassword(email: string): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${environment.apiUrl}/auth/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${environment.apiUrl}/auth/reset-password`, { token, newPassword });
+  }
+
+  changePassword(currentPassword: string, newPassword: string): Observable<MessageResponse> {
+    return this.http.patch<MessageResponse>(`${environment.apiUrl}/auth/change-password`, {
+      currentPassword,
+      newPassword,
+    });
   }
 
   logout(): void {

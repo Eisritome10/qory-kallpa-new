@@ -10,17 +10,26 @@ import { Role } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from '../email/email.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { JwtPayload } from './strategies/jwt.strategy';
 
 const SALT_ROUNDS = 10;
 const EMAIL_VERIFICATION_EXPIRES_IN = '24h';
 const EMAIL_VERIFICATION_PURPOSE = 'email-verification';
+const PASSWORD_RESET_EXPIRES_IN = '1h';
+const PASSWORD_RESET_PURPOSE = 'password-reset';
 
 interface EmailVerificationPayload {
   sub: string;
   purpose: typeof EMAIL_VERIFICATION_PURPOSE;
+}
+
+interface PasswordResetPayload {
+  sub: string;
+  purpose: typeof PASSWORD_RESET_PURPOSE;
 }
 
 interface UserForAuthResponse {
@@ -52,6 +61,9 @@ export class AuthService {
         fullName: dto.fullName,
         email: dto.email,
         password: hashedPassword,
+        phone: dto.phone,
+        dni: dto.dni,
+        birthDate: dto.birthDate,
         role: Role.POSTULANTE,
         isEmailVerified: false,
       },
@@ -113,6 +125,60 @@ export class AuthService {
     }
 
     return { message: genericMessage };
+  }
+
+  async forgotPassword(email: string) {
+    const genericMessage = 'Si el correo existe en nuestro sistema, te enviamos un enlace para restablecer tu contraseña.';
+    const user = await this.prisma.user.findUnique({ where: { email } });
+
+    if (user && user.isActive) {
+      const payload: PasswordResetPayload = { sub: user.id, purpose: PASSWORD_RESET_PURPOSE };
+      const token = this.jwtService.sign(payload, { expiresIn: PASSWORD_RESET_EXPIRES_IN });
+      await this.emailService.sendPasswordResetEmail(user.email, user.fullName, token);
+    }
+
+    return { message: genericMessage };
+  }
+
+  async resetPassword(dto: ResetPasswordDto) {
+    let payload: PasswordResetPayload;
+    try {
+      payload = this.jwtService.verify<PasswordResetPayload>(dto.token);
+    } catch {
+      throw new BadRequestException('El enlace para restablecer tu contraseña no es válido o expiró');
+    }
+
+    if (payload.purpose !== PASSWORD_RESET_PURPOSE) {
+      throw new BadRequestException('El enlace para restablecer tu contraseña no es válido');
+    }
+
+    const hashedPassword = await bcrypt.hash(dto.newPassword, SALT_ROUNDS);
+    await this.prisma.user.update({
+      where: { id: payload.sub },
+      data: { password: hashedPassword },
+    });
+
+    return { message: 'Tu contraseña se actualizó correctamente. Ya puedes iniciar sesión.' };
+  }
+
+  async changePassword(userId: string, dto: ChangePasswordDto) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new BadRequestException('Usuario no encontrado');
+    }
+
+    const passwordMatches = await bcrypt.compare(dto.currentPassword, user.password);
+    if (!passwordMatches) {
+      throw new UnauthorizedException('La contraseña actual no es correcta');
+    }
+
+    const hashedPassword = await bcrypt.hash(dto.newPassword, SALT_ROUNDS);
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedPassword },
+    });
+
+    return { message: 'Tu contraseña se actualizó correctamente.' };
   }
 
   private async sendVerificationEmail(userId: string, email: string, fullName: string): Promise<void> {

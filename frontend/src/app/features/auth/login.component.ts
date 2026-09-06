@@ -32,7 +32,10 @@ import { DIRECTOR_ROLES } from '../../core/models/user.model';
           </div>
 
           <div>
-            <label class="mb-1 block text-sm font-medium text-marino-800">Contraseña</label>
+            <div class="mb-1 flex items-center justify-between">
+              <label class="block text-sm font-medium text-marino-800">Contraseña</label>
+              <a routerLink="/olvide-contrasena" class="text-xs font-semibold text-naranja-600 hover:underline">¿Olvidaste tu contraseña?</a>
+            </div>
             <input
               type="password"
               formControlName="password"

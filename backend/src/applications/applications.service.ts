@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -38,24 +39,38 @@ export class ApplicationsService {
       throw new BadRequestException('Debes adjuntar tu CV en formato PDF');
     }
 
+    const existing = await this.prisma.application.findUnique({
+      where: { postulanteId_area: { postulanteId, area: dto.area } },
+    });
+    if (existing) {
+      throw new ConflictException('Ya tienes una postulación registrada para esta área. No es posible postular más de una vez a la misma área.');
+    }
+
     const { path, fileName } = await this.storageService.uploadPdf(file, `cv/${postulanteId}`);
 
-    return this.prisma.application.create({
-      data: {
-        fullName: dto.fullName,
-        email: dto.email,
-        phone: dto.phone,
-        dni: dto.dni,
-        birthDate: dto.birthDate,
-        area: dto.area,
-        motivation: dto.motivation,
-        availability: dto.availability,
-        cvUrl: path,
-        cvFileName: fileName,
-        status: ApplicationStatus.PENDIENTE,
-        postulanteId,
-      },
-    });
+    try {
+      return await this.prisma.application.create({
+        data: {
+          fullName: dto.fullName,
+          email: dto.email,
+          phone: dto.phone,
+          dni: dto.dni,
+          birthDate: dto.birthDate,
+          area: dto.area,
+          motivation: dto.motivation,
+          availability: dto.availability,
+          cvUrl: path,
+          cvFileName: fileName,
+          status: ApplicationStatus.PENDIENTE,
+          postulanteId,
+        },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+        throw new ConflictException('Ya tienes una postulación registrada para esta área. No es posible postular más de una vez a la misma área.');
+      }
+      throw error;
+    }
   }
 
   async findMine(postulanteId: string) {

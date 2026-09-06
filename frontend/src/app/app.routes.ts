@@ -5,6 +5,8 @@ import { LandingComponent } from './features/landing/landing.component';
 import { LoginComponent } from './features/auth/login.component';
 import { RegisterComponent } from './features/auth/register.component';
 import { VerifyEmailComponent } from './features/auth/verify-email.component';
+import { ForgotPasswordComponent } from './features/auth/forgot-password.component';
+import { ResetPasswordComponent } from './features/auth/reset-password.component';
 import { TeamSectionComponent } from './features/landing/team-section.component';
 import { ProjectsSectionComponent } from './features/landing/projects-section.component';
 import { AlliancesSectionComponent } from './features/landing/alliances-section.component';
@@ -27,6 +29,8 @@ export const routes: Routes = [
       { path: 'ingresar', component: LoginComponent },
       { path: 'registrarse', component: RegisterComponent },
       { path: 'verificar-correo', component: VerifyEmailComponent },
+      { path: 'olvide-contrasena', component: ForgotPasswordComponent },
+      { path: 'restablecer-contrasena', component: ResetPasswordComponent },
       { path: 'equipo', component: TeamSectionComponent },
       { path: 'proyectos', component: ProjectsSectionComponent },
       { path: 'alianzas', component: AlliancesSectionComponent },

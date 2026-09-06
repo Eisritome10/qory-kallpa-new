@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { RevealOnScrollDirective } from '../../shared/directives/reveal-on-scroll.directive';
 import { StatCounterComponent } from '../../shared/components/stat-counter.component';
 import { SusFeedbackWidgetComponent } from './sus-feedback-widget.component';
 import { MissionSectionComponent } from './mission-section.component';
+import { AuthService } from '../../core/services/auth.service';
 
 interface Area {
   name: string;
@@ -167,12 +168,27 @@ const ROTATING_WORDS = ['lenguas originarias', 'culturas ancestrales', 'comunida
     <!-- Encuesta de usabilidad -->
     <section class="bg-gray-50 py-20">
       <div appReveal class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <app-sus-feedback-widget />
+        @if (isAuthenticated()) {
+          <app-sus-feedback-widget />
+        } @else {
+          <div class="card text-center">
+            <h3 class="text-lg font-bold text-marino-900">Ayúdanos a mejorar</h3>
+            <p class="mt-2 text-sm text-marino-500">
+              Inicia sesión o crea una cuenta para dejarnos tu opinión sobre la plataforma.
+            </p>
+            <div class="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
+              <a routerLink="/ingresar" class="btn-primary">Iniciar sesión</a>
+              <a routerLink="/registrarse" class="btn-secondary">Crear cuenta</a>
+            </div>
+          </div>
+        }
       </div>
     </section>
   `,
 })
 export class LandingComponent implements OnInit, OnDestroy {
+  private readonly authService = inject(AuthService);
+  readonly isAuthenticated = this.authService.isAuthenticated;
   readonly areas = AREAS;
   readonly stats = [
     { value: 500, suffix: '+', label: 'Voluntarios formados' },

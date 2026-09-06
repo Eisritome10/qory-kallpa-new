@@ -55,6 +55,32 @@ function passwordsMatchValidator(control: AbstractControl): ValidationErrors | n
               }
             </div>
 
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label class="mb-1 block text-sm font-medium text-marino-800">Teléfono</label>
+                <input type="tel" formControlName="phone" class="input-field" [class.input-error]="isInvalid('phone')" placeholder="+51 999 999 999" />
+                @if (isInvalid('phone')) {
+                  <p class="field-error">Ingresa un teléfono válido.</p>
+                }
+              </div>
+
+              <div>
+                <label class="mb-1 block text-sm font-medium text-marino-800">DNI / Documento</label>
+                <input type="text" formControlName="dni" class="input-field" [class.input-error]="isInvalid('dni')" />
+                @if (isInvalid('dni')) {
+                  <p class="field-error">Ingresa un documento válido.</p>
+                }
+              </div>
+            </div>
+
+            <div>
+              <label class="mb-1 block text-sm font-medium text-marino-800">Fecha de nacimiento</label>
+              <input type="date" formControlName="birthDate" class="input-field" [class.input-error]="isInvalid('birthDate')" />
+              @if (isInvalid('birthDate')) {
+                <p class="field-error">Ingresa tu fecha de nacimiento.</p>
+              }
+            </div>
+
             <div>
               <label class="mb-1 block text-sm font-medium text-marino-800">Contraseña</label>
               <input type="password" formControlName="password" class="input-field" [class.input-error]="isInvalid('password')" />
@@ -102,6 +128,9 @@ export class RegisterComponent {
     {
       fullName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required, Validators.pattern(/^[0-9+\s-]{6,15}$/)]],
+      dni: ['', [Validators.required, Validators.pattern(/^[0-9A-Za-z]{6,12}$/)]],
+      birthDate: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', [Validators.required]],
     },
@@ -124,9 +153,11 @@ export class RegisterComponent {
     this.loading.set(true);
     this.errorMessage.set(null);
 
-    const { fullName, email, password } = this.form.getRawValue();
+    const { fullName, email, password, phone, dni, birthDate } = this.form.getRawValue();
 
-    this.authService.register({ fullName, email, password }).subscribe({
+    this.authService
+      .register({ fullName, email, password, phone, dni, birthDate: new Date(birthDate).toISOString() })
+      .subscribe({
       next: (response) => {
         this.loading.set(false);
         this.registeredEmail.set(response.email);

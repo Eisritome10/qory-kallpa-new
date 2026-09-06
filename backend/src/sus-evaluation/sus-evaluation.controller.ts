@@ -1,8 +1,10 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { Roles } from '../common/decorators/roles.decorator';
 import { DIRECTOR_ROLES } from '../common/enums/area-role.map';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
+import { AuthenticatedUser } from '../auth/strategies/jwt.strategy';
 import { CreateSusEvaluationDto } from './dto/create-sus-evaluation.dto';
 import { SusEvaluationService } from './sus-evaluation.service';
 
@@ -10,10 +12,11 @@ import { SusEvaluationService } from './sus-evaluation.service';
 export class SusEvaluationController {
   constructor(private readonly susEvaluationService: SusEvaluationService) {}
 
-  /** Publico: cualquier visitante/postulante puede evaluar la usabilidad de la plataforma. */
+  /** Solo usuarios con sesion iniciada (correo verificado) pueden evaluar la usabilidad de la plataforma. */
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() dto: CreateSusEvaluationDto) {
-    return this.susEvaluationService.create(dto);
+  create(@CurrentUser() user: AuthenticatedUser, @Body() dto: CreateSusEvaluationDto) {
+    return this.susEvaluationService.create(dto, user.id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

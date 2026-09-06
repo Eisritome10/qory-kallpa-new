@@ -3,8 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { Resend } from 'resend';
 import { ApplicationStatus } from '@prisma/client';
 
-const BRAND_COLOR = '#0f2843';
-const ACCENT_COLOR = '#f8621a';
+const BRAND_COLOR = '#022e6c';
+const ACCENT_COLOR = '#f28705';
 
 const STATUS_COPY: Record<ApplicationStatus, { title: string; body: string }> = {
   PENDIENTE: {
@@ -59,6 +59,26 @@ export class EmailService {
         </p>
         <p style="font-size:13px;color:#667085;">Si el botón no funciona, copia y pega este enlace en tu navegador:<br>${verifyUrl}</p>
         <p style="font-size:13px;color:#667085;">Este enlace expira en 24 horas.</p>
+      `),
+    });
+  }
+
+  async sendPasswordResetEmail(to: string, fullName: string, token: string): Promise<void> {
+    const resetUrl = `${this.frontendUrl}/restablecer-contrasena?token=${encodeURIComponent(token)}`;
+
+    await this.send({
+      to,
+      subject: 'Restablece tu contraseña - Qori Kallpa',
+      html: this.wrapTemplate(`
+        <h1 style="color:${BRAND_COLOR};margin:0 0 16px;">Restablece tu contraseña</h1>
+        <p>Hola ${this.escape(fullName)}, recibimos una solicitud para restablecer la contraseña de tu cuenta.</p>
+        <p style="text-align:center;margin:32px 0;">
+          <a href="${resetUrl}" style="background:${ACCENT_COLOR};color:#ffffff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;">
+            Restablecer mi contraseña
+          </a>
+        </p>
+        <p style="font-size:13px;color:#667085;">Si el botón no funciona, copia y pega este enlace en tu navegador:<br>${resetUrl}</p>
+        <p style="font-size:13px;color:#667085;">Este enlace expira en 1 hora. Si tú no solicitaste este cambio, puedes ignorar este correo.</p>
       `),
     });
   }

@@ -257,7 +257,11 @@ export class ApplicationFormComponent implements OnInit {
       },
       error: (error: HttpErrorResponse) => {
         this.loading.set(false);
-        this.errorMessage.set(error.error?.message ?? 'No se pudo enviar tu postulación. Inténtalo nuevamente.');
+        if (error.status === 409) {
+          this.errorMessage.set(error.error?.message ?? 'Ya tienes una postulación registrada para esta área.');
+        } else {
+          this.errorMessage.set(error.error?.message ?? 'No se pudo enviar tu postulación. Inténtalo nuevamente.');
+        }
       },
     });
   }

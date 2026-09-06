@@ -1,10 +1,16 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { UsersService } from '../../core/services/users.service';
 import { ROLE_LABELS, UserProfile } from '../../core/models/user.model';
+
+function newPasswordsMatchValidator(control: AbstractControl): ValidationErrors | null {
+  const newPassword = control.get('newPassword')?.value;
+  const confirmNewPassword = control.get('confirmNewPassword')?.value;
+  return newPassword === confirmNewPassword ? null : { passwordsMismatch: true };
+}
 
 const MAX_AVATAR_SIZE_BYTES = 3 * 1024 * 1024;
 
@@ -112,6 +118,52 @@ const MAX_AVATAR_SIZE_BYTES = 3 * 1024 * 1024;
           Tip: al mantener tu información actualizada aquí, tus próximas postulaciones se completarán automáticamente
           con estos datos.
         </div>
+
+        <form class="card mt-6 space-y-5" [formGroup]="passwordForm" (ngSubmit)="onChangePassword()">
+          <h2 class="text-lg font-bold text-marino-900">Cambiar contraseña</h2>
+
+          <div>
+            <label class="mb-1 block text-sm font-medium text-marino-800">Contraseña actual</label>
+            <input type="password" formControlName="currentPassword" class="input-field" [class.input-error]="isPasswordFieldInvalid('currentPassword')" />
+            @if (isPasswordFieldInvalid('currentPassword')) {
+              <p class="field-error">Ingresa tu contraseña actual.</p>
+            }
+          </div>
+
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label class="mb-1 block text-sm font-medium text-marino-800">Nueva contraseña</label>
+              <input type="password" formControlName="newPassword" class="input-field" [class.input-error]="isPasswordFieldInvalid('newPassword')" />
+              @if (isPasswordFieldInvalid('newPassword')) {
+                <p class="field-error">La contraseña debe tener al menos 8 caracteres.</p>
+              }
+            </div>
+
+            <div>
+              <label class="mb-1 block text-sm font-medium text-marino-800">Confirma la nueva contraseña</label>
+              <input
+                type="password"
+                formControlName="confirmNewPassword"
+                class="input-field"
+                [class.input-error]="passwordForm.errors?.['passwordsMismatch'] && passwordForm.get('confirmNewPassword')?.touched"
+              />
+              @if (passwordForm.errors?.['passwordsMismatch'] && passwordForm.get('confirmNewPassword')?.touched) {
+                <p class="field-error">Las contraseñas no coinciden.</p>
+              }
+            </div>
+          </div>
+
+          @if (passwordSuccessMessage()) {
+            <div class="rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{{ passwordSuccessMessage() }}</div>
+          }
+          @if (passwordErrorMessage()) {
+            <div class="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{{ passwordErrorMessage() }}</div>
+          }
+
+          <button type="submit" class="btn-primary" [disabled]="passwordForm.invalid || changingPassword()">
+            {{ changingPassword() ? 'Guardando...' : 'Cambiar contraseña' }}
+          </button>
+        </form>
       }
       }
     </section>
@@ -125,6 +177,9 @@ export class PerfilComponent implements OnInit {
   readonly errorMessage = signal<string | null>(null);
   readonly avatarUploading = signal(false);
   readonly avatarError = signal<string | null>(null);
+  readonly changingPassword = signal(false);
+  readonly passwordSuccessMessage = signal<string | null>(null);
+  readonly passwordErrorMessage = signal<string | null>(null);
 
   private readonly fb = inject(FormBuilder);
 
@@ -134,6 +189,15 @@ export class PerfilComponent implements OnInit {
     dni: ['', [Validators.pattern(/^[0-9A-Za-z]{6,12}$/)]],
     birthDate: [''],
   });
+
+  readonly passwordForm = this.fb.nonNullable.group(
+    {
+      currentPassword: ['', [Validators.required]],
+      newPassword: ['', [Validators.required, Validators.minLength(8)]],
+      confirmNewPassword: ['', [Validators.required]],
+    },
+    { validators: newPasswordsMatchValidator },
+  );
 
   constructor(
     private readonly usersService: UsersService,
@@ -158,6 +222,11 @@ export class PerfilComponent implements OnInit {
 
   isInvalid(controlName: string): boolean {
     const control = this.form.get(controlName);
+    return !!control && control.invalid && (control.dirty || control.touched);
+  }
+
+  isPasswordFieldInvalid(controlName: string): boolean {
+    const control = this.passwordForm.get(controlName);
     return !!control && control.invalid && (control.dirty || control.touched);
   }
 
@@ -237,6 +306,30 @@ export class PerfilComponent implements OnInit {
         this.avatarUploading.set(false);
         this.avatarError.set('No se pudo subir la foto. Inténtalo nuevamente.');
         input.value = '';
+      },
+    });
+  }
+
+  onChangePassword(): void {
+    if (this.passwordForm.invalid) {
+      this.passwordForm.markAllAsTouched();
+      return;
+    }
+
+    this.changingPassword.set(true);
+    this.passwordSuccessMessage.set(null);
+    this.passwordErrorMessage.set(null);
+
+    const { currentPassword, newPassword } = this.passwordForm.getRawValue();
+    this.authService.changePassword(currentPassword, newPassword).subscribe({
+      next: () => {
+        this.changingPassword.set(false);
+        this.passwordSuccessMessage.set('Tu contraseña se actualizó correctamente.');
+        this.passwordForm.reset();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.changingPassword.set(false);
+        this.passwordErrorMessage.set(error.error?.message ?? 'No se pudo cambiar tu contraseña. Inténtalo nuevamente.');
       },
     });
   }
