@@ -12,7 +12,7 @@ import { ROLE_LABELS } from '../../../core/models/user.model';
     <div class="flex min-h-screen bg-gray-50">
       <aside class="hidden w-64 flex-col bg-marino-900 text-white sm:flex">
         <div class="flex items-center gap-2 px-6 py-5">
-          <span class="flex h-9 w-9 items-center justify-center rounded-full bg-naranja-500 text-sm font-extrabold">QK</span>
+          <img src="assets/logo-mark.png" alt="Qori Kallpa" class="h-9 w-9 rounded-full object-cover ring-1 ring-white/20" />
           <span class="text-lg font-bold">Panel Qori Kallpa</span>
         </div>
         <nav class="mt-4 flex-1 space-y-1 px-3">
@@ -29,14 +29,15 @@ import { ROLE_LABELS } from '../../../core/models/user.model';
             routerLinkActive="bg-marino-700 text-white"
             class="block rounded-lg px-4 py-2.5 text-sm font-medium text-marino-200 hover:bg-marino-800"
           >
-            Metricas e indicadores
+            Métricas e indicadores
           </a>
         </nav>
         <div class="border-t border-white/10 px-4 py-4">
           <p class="text-sm font-semibold">{{ auth.currentUser()?.fullName }}</p>
           <p class="text-xs text-marino-300">{{ roleLabel() }}</p>
-          <button type="button" class="mt-3 w-full rounded-lg bg-white/10 px-3 py-2 text-xs font-semibold hover:bg-white/20" (click)="auth.logout()">
-            Cerrar sesion
+          <a routerLink="/perfil" class="mt-3 block text-xs font-semibold text-marino-300 hover:text-white">Mi perfil</a>
+          <button type="button" class="mt-2 w-full rounded-lg bg-white/10 px-3 py-2 text-xs font-semibold hover:bg-white/20" (click)="auth.logout()">
+            Cerrar sesión
           </button>
         </div>
       </aside>

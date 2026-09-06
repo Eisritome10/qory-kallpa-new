@@ -1,8 +1,8 @@
 import { AreaVoluntariado, Role } from '@prisma/client';
 
 /**
- * Relaciona cada rol de Director con el area funcional de Qori Kallpa que gestiona.
- * DIRECTOR_GENERAL no aparece aqui: se le trata como acceso a todas las areas.
+ * Relaciona cada rol de Director con el área funcional de Qori Kallpa que gestiona.
+ * DIRECTOR_GENERAL no aparece aquí: se le trata como acceso a todas las áreas.
  */
 export const DIRECTOR_AREA_MAP: Partial<Record<Role, AreaVoluntariado>> = {
   [Role.DIRECTOR_ALIANZAS_RECAUDACION]: AreaVoluntariado.ALIANZAS_RECAUDACION,

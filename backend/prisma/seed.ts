@@ -7,19 +7,19 @@ const SALT_ROUNDS = 10;
 const DEFAULT_PASSWORD = 'QoriKallpa2025!';
 
 const directors: { fullName: string; email: string; role: Role }[] = [
-  { fullName: 'Direccion General', email: 'direccion.general@qorikallpa.org', role: Role.DIRECTOR_GENERAL },
+  { fullName: 'Dirección General', email: 'direccion.general@qorikallpa.org', role: Role.DIRECTOR_GENERAL },
   {
-    fullName: 'Directora de Alianzas y Recaudacion',
+    fullName: 'Directora de Alianzas y Recaudación',
     email: 'alianzas@qorikallpa.org',
     role: Role.DIRECTOR_ALIANZAS_RECAUDACION,
   },
   {
-    fullName: 'Director de Tecnologia y Sistemas',
+    fullName: 'Director de Tecnología y Sistemas',
     email: 'tecnologia@qorikallpa.org',
     role: Role.DIRECTOR_TECNOLOGIA_SISTEMAS,
   },
   {
-    fullName: 'Directora de Supervision de Proyectos',
+    fullName: 'Directora de Supervisión de Proyectos',
     email: 'supervision.proyectos@qorikallpa.org',
     role: Role.DIRECTOR_SUPERVISION_PROYECTOS,
   },
@@ -27,7 +27,7 @@ const directors: { fullName: string; email: string; role: Role }[] = [
   { fullName: 'Director de Eventos', email: 'eventos@qorikallpa.org', role: Role.DIRECTOR_EVENTOS },
   { fullName: 'Directora de Marketing', email: 'marketing@qorikallpa.org', role: Role.DIRECTOR_MARKETING },
   {
-    fullName: 'Directora de Gestion Humana',
+    fullName: 'Directora de Gestión Humana',
     email: 'gestion.humana@qorikallpa.org',
     role: Role.DIRECTOR_GESTION_HUMANA,
   },
@@ -39,7 +39,7 @@ async function main() {
   for (const director of directors) {
     await prisma.user.upsert({
       where: { email: director.email },
-      update: { isEmailVerified: true, isActive: true },
+      update: { fullName: director.fullName, isEmailVerified: true, isActive: true },
       create: {
         fullName: director.fullName,
         email: director.email,
@@ -52,8 +52,8 @@ async function main() {
     console.log(`Usuario listo: ${director.email} (${director.role})`);
   }
 
-  console.log('\nContrasena para todos los directores de prueba:', DEFAULT_PASSWORD);
-  console.log('Cambia estas contrasenas antes de pasar a produccion.');
+  console.log('\nContraseña para todos los directores de prueba:', DEFAULT_PASSWORD);
+  console.log('Cambia estas contraseñas antes de pasar a producción.');
 }
 
 main()

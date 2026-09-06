@@ -23,6 +23,14 @@ interface EmailVerificationPayload {
   purpose: typeof EMAIL_VERIFICATION_PURPOSE;
 }
 
+interface UserForAuthResponse {
+  id: string;
+  email: string;
+  fullName: string;
+  role: Role;
+  avatarUrl: string | null;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -52,7 +60,7 @@ export class AuthService {
     await this.sendVerificationEmail(user.id, user.email, user.fullName);
 
     return {
-      message: 'Cuenta creada. Revisa tu correo electronico para verificar tu cuenta antes de ingresar.',
+      message: 'Cuenta creada. Revisa tu correo electrónico para verificar tu cuenta antes de ingresar.',
       email: user.email,
     };
   }
@@ -61,19 +69,19 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
 
     if (!user || !user.isActive) {
-      throw new UnauthorizedException('Credenciales invalidas');
+      throw new UnauthorizedException('Credenciales inválidas');
     }
 
     const passwordMatches = await bcrypt.compare(dto.password, user.password);
     if (!passwordMatches) {
-      throw new UnauthorizedException('Credenciales invalidas');
+      throw new UnauthorizedException('Credenciales inválidas');
     }
 
     if (!user.isEmailVerified) {
-      throw new ForbiddenException('Debes verificar tu correo electronico antes de iniciar sesion');
+      throw new ForbiddenException('Debes verificar tu correo electrónico antes de iniciar sesión');
     }
 
-    return this.buildAuthResponse(user.id, user.email, user.fullName, user.role);
+    return this.buildAuthResponse(user);
   }
 
   async verifyEmail(token: string) {
@@ -81,11 +89,11 @@ export class AuthService {
     try {
       payload = this.jwtService.verify<EmailVerificationPayload>(token);
     } catch {
-      throw new BadRequestException('El enlace de verificacion no es valido o expiro');
+      throw new BadRequestException('El enlace de verificación no es válido o expiró');
     }
 
     if (payload.purpose !== EMAIL_VERIFICATION_PURPOSE) {
-      throw new BadRequestException('El enlace de verificacion no es valido');
+      throw new BadRequestException('El enlace de verificación no es válido');
     }
 
     const user = await this.prisma.user.update({
@@ -93,7 +101,7 @@ export class AuthService {
       data: { isEmailVerified: true },
     });
 
-    return this.buildAuthResponse(user.id, user.email, user.fullName, user.role);
+    return this.buildAuthResponse(user);
   }
 
   async resendVerification(email: string) {
@@ -113,11 +121,17 @@ export class AuthService {
     await this.emailService.sendVerificationEmail(email, fullName, token);
   }
 
-  private buildAuthResponse(id: string, email: string, fullName: string, role: Role) {
-    const payload: JwtPayload = { sub: id, email, role };
+  private buildAuthResponse(user: UserForAuthResponse) {
+    const payload: JwtPayload = { sub: user.id, email: user.email, role: user.role };
     return {
       accessToken: this.jwtService.sign(payload),
-      user: { id, email, fullName, role },
+      user: {
+        id: user.id,
+        email: user.email,
+        fullName: user.fullName,
+        role: user.role,
+        avatarUrl: user.avatarUrl,
+      },
     };
   }
 }

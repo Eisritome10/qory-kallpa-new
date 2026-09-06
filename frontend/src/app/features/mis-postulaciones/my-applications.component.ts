@@ -20,13 +20,13 @@ import {
           <h1 class="text-3xl font-extrabold text-marino-900">Mis postulaciones</h1>
           <p class="mt-1 text-marino-500">Sigue el estado de tus postulaciones como voluntario/a.</p>
         </div>
-        <a routerLink="/postular" class="btn-primary">Nueva postulacion</a>
+        <a routerLink="/postular" class="btn-primary">Nueva postulación</a>
       </div>
 
       @if (loading()) {
         <p class="text-marino-500">Cargando...</p>
       } @else if (applications().length === 0) {
-        <div class="card text-center text-marino-500">Aun no tienes postulaciones registradas.</div>
+        <div class="card text-center text-marino-500">Aún no tienes postulaciones registradas.</div>
       } @else {
         <div class="space-y-4">
           @for (application of applications(); track application.id) {

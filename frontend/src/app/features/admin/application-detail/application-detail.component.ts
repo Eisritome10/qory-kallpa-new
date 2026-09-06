@@ -46,7 +46,7 @@ const NEXT_STATUS: Record<ApplicationStatus, ApplicationStatus[]> = {
 
           <dl class="mt-6 grid gap-4 sm:grid-cols-2">
             <div>
-              <dt class="text-xs font-semibold uppercase text-marino-400">Area</dt>
+              <dt class="text-xs font-semibold uppercase text-marino-400">Área</dt>
               <dd class="text-marino-800">{{ areaLabels[app.area] }}</dd>
             </div>
             <div>
@@ -64,7 +64,7 @@ const NEXT_STATUS: Record<ApplicationStatus, ApplicationStatus[]> = {
           </dl>
 
           <div class="mt-6">
-            <dt class="text-xs font-semibold uppercase text-marino-400">Motivacion</dt>
+            <dt class="text-xs font-semibold uppercase text-marino-400">Motivación</dt>
             <dd class="mt-1 whitespace-pre-line text-marino-800">{{ app.motivation }}</dd>
           </div>
 
@@ -89,7 +89,7 @@ const NEXT_STATUS: Record<ApplicationStatus, ApplicationStatus[]> = {
           <h2 class="text-lg font-bold text-marino-900">Cambiar estado</h2>
 
           @if (availableTransitions(app).length === 0) {
-            <p class="mt-3 text-sm text-marino-500">Esta postulacion se encuentra en un estado final.</p>
+            <p class="mt-3 text-sm text-marino-500">Esta postulación se encuentra en un estado final.</p>
           } @else {
             <form class="mt-4 space-y-4" [formGroup]="statusForm" (ngSubmit)="onSubmitStatus(app.id)">
               <div>
@@ -106,7 +106,7 @@ const NEXT_STATUS: Record<ApplicationStatus, ApplicationStatus[]> = {
                 <label class="mb-1 block text-sm font-medium text-marino-800">
                   Feedback @if (statusForm.value.status === 'RECHAZADO') { (obligatorio) }
                 </label>
-                <textarea formControlName="feedback" rows="4" class="input-field" placeholder="Comparte retroalimentacion con el postulante"></textarea>
+                <textarea formControlName="feedback" rows="4" class="input-field" placeholder="Comparte retroalimentación con el postulante"></textarea>
               </div>
 
               @if (statusError()) {
@@ -181,7 +181,7 @@ export class ApplicationDetailComponent implements OnInit {
     const { status, feedback } = this.statusForm.getRawValue();
 
     if (status === 'RECHAZADO' && !feedback.trim()) {
-      this.statusError.set('Debes indicar un feedback al rechazar una postulacion.');
+      this.statusError.set('Debes indicar un feedback al rechazar una postulación.');
       return;
     }
 

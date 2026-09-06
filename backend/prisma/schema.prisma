@@ -43,6 +43,10 @@ model User {
   email     String   @unique
   password  String
   fullName  String
+  phone     String?
+  dni       String?
+  birthDate DateTime?
+  avatarUrl String?
   role      Role     @default(POSTULANTE)
   isActive  Boolean  @default(true)
   isEmailVerified Boolean @default(false)

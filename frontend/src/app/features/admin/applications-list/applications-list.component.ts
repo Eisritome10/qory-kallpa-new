@@ -24,9 +24,9 @@ import {
         <h1 class="text-2xl font-extrabold text-marino-900">Postulaciones</h1>
         <p class="text-sm text-marino-500">
           @if (auth.currentUser()?.role === 'DIRECTOR_GENERAL') {
-            Vista general de todas las areas.
+            Vista general de todas las áreas.
           } @else {
-            Postulaciones del area {{ areaLabelForRole() }}.
+            Postulaciones del área {{ areaLabelForRole() }}.
           }
         </p>
       </div>
@@ -44,7 +44,7 @@ import {
 
       @if (auth.currentUser()?.role === 'DIRECTOR_GENERAL') {
         <select formControlName="area" class="input-field max-w-[180px]">
-          <option value="">Todas las areas</option>
+          <option value="">Todas las áreas</option>
           @for (area of areas; track area) {
             <option [value]="area">{{ areaLabels[area] }}</option>
           }
@@ -62,7 +62,7 @@ import {
           <thead class="bg-gray-50">
             <tr>
               <th class="px-4 py-3 text-left font-semibold text-marino-700">Postulante</th>
-              <th class="px-4 py-3 text-left font-semibold text-marino-700">Area</th>
+              <th class="px-4 py-3 text-left font-semibold text-marino-700">Área</th>
               <th class="px-4 py-3 text-left font-semibold text-marino-700">Fecha</th>
               <th class="px-4 py-3 text-left font-semibold text-marino-700">Estado</th>
               <th class="px-4 py-3 text-right font-semibold text-marino-700">Acciones</th>

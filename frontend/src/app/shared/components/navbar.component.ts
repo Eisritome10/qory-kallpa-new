@@ -15,10 +15,7 @@ import { ROLE_LABELS } from '../../core/models/user.model';
     >
       <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <a routerLink="/" class="flex items-center gap-2">
-          <span
-            class="flex h-10 w-10 items-center justify-center rounded-full bg-marino-800 text-lg font-extrabold text-naranja-400"
-            >QK</span
-          >
+          <img src="assets/logo-mark.png" alt="Qori Kallpa" class="h-10 w-10 rounded-full object-cover ring-1 ring-marino-900/10" />
           <span class="leading-tight">
             <span class="block text-base font-bold text-marino-900">Qori Kallpa</span>
             <span class="block text-xs font-medium text-naranja-600">Voces con Poder</span>
@@ -29,7 +26,7 @@ import { ROLE_LABELS } from '../../core/models/user.model';
           type="button"
           class="rounded-md p-2 text-marino-800 sm:hidden"
           (click)="mobileOpen.set(!mobileOpen())"
-          aria-label="Abrir menu"
+          aria-label="Abrir menú"
         >
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -72,12 +69,27 @@ import { ROLE_LABELS } from '../../core/models/user.model';
           }
 
           @if (auth.isAuthenticated()) {
-            <div class="flex items-center gap-3 border-l border-marino-100 pl-6">
-              <span class="text-xs text-marino-600">
-                {{ auth.currentUser()?.fullName }}
-                <span class="block text-[10px] uppercase tracking-wide text-marino-400">{{ roleLabel() }}</span>
-              </span>
-              <button type="button" class="btn-secondary !px-4 !py-2 text-sm" (click)="auth.logout()">Salir</button>
+            <div class="relative border-l border-marino-100 pl-6">
+              <button type="button" class="flex items-center gap-2" (click)="userMenuOpen.set(!userMenuOpen())">
+                @if (auth.currentUser()?.avatarUrl; as avatarUrl) {
+                  <img [src]="avatarUrl" alt="Foto de perfil" class="h-8 w-8 rounded-full object-cover ring-1 ring-marino-200" />
+                } @else {
+                  <span class="flex h-8 w-8 items-center justify-center rounded-full bg-marino-800 text-xs font-extrabold text-naranja-400">
+                    {{ initials() }}
+                  </span>
+                }
+                <span class="text-xs text-marino-600 text-left">
+                  {{ auth.currentUser()?.fullName }}
+                  <span class="block text-[10px] uppercase tracking-wide text-marino-400">{{ roleLabel() }}</span>
+                </span>
+              </button>
+
+              @if (userMenuOpen()) {
+                <div class="absolute right-0 top-full mt-2 w-44 rounded-xl bg-white p-2 shadow-lg ring-1 ring-black/5">
+                  <a routerLink="/perfil" (click)="userMenuOpen.set(false)" class="block rounded-lg px-3 py-2 text-sm font-medium text-marino-700 hover:bg-marino-50">Mi perfil</a>
+                  <button type="button" class="block w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50" (click)="auth.logout()">Salir</button>
+                </div>
+              }
             </div>
           } @else {
             <a routerLink="/ingresar" class="btn-secondary !px-4 !py-2 text-sm">Ingresar</a>
@@ -102,6 +114,7 @@ import { ROLE_LABELS } from '../../core/models/user.model';
             <a routerLink="/admin" (click)="mobileOpen.set(false)" class="block rounded-md px-3 py-2 text-sm font-semibold text-marino-800 hover:bg-marino-50">Panel administrativo</a>
           }
           @if (auth.isAuthenticated()) {
+            <a routerLink="/perfil" (click)="mobileOpen.set(false)" class="block rounded-md px-3 py-2 text-sm font-semibold text-marino-800 hover:bg-marino-50">Mi perfil</a>
             <button type="button" class="block w-full rounded-md px-3 py-2 text-left text-sm font-semibold text-red-600 hover:bg-red-50" (click)="auth.logout()">Salir</button>
           } @else {
             <a routerLink="/ingresar" (click)="mobileOpen.set(false)" class="block rounded-md px-3 py-2 text-sm font-semibold text-naranja-600 hover:bg-naranja-50">Ingresar</a>
@@ -115,6 +128,7 @@ export class NavbarComponent {
   readonly mobileOpen = signal(false);
   readonly scrolled = signal(false);
   readonly aboutOpen = signal(false);
+  readonly userMenuOpen = signal(false);
 
   private readonly elementRef = inject(ElementRef<HTMLElement>);
 
@@ -127,18 +141,30 @@ export class NavbarComponent {
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    if (this.aboutOpen() && !this.elementRef.nativeElement.contains(event.target as Node)) {
-      this.aboutOpen.set(false);
+    if (!this.elementRef.nativeElement.contains(event.target as Node)) {
+      if (this.aboutOpen()) this.aboutOpen.set(false);
+      if (this.userMenuOpen()) this.userMenuOpen.set(false);
     }
   }
 
   @HostListener('document:keydown.escape')
   onEscape(): void {
     this.aboutOpen.set(false);
+    this.userMenuOpen.set(false);
   }
 
   roleLabel(): string {
     const role = this.auth.currentUser()?.role;
     return role ? ROLE_LABELS[role] : '';
+  }
+
+  initials(): string {
+    const fullName = this.auth.currentUser()?.fullName ?? '';
+    return fullName
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join('');
   }
 }

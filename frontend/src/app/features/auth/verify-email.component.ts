@@ -20,12 +20,12 @@ type VerifyState = 'loading' | 'success' | 'error';
           }
           @case ('success') {
             <p class="text-lg font-bold text-marino-900">¡Correo verificado!</p>
-            <p class="mt-2 text-sm text-marino-500">Tu cuenta esta activa. Redirigiendote...</p>
+            <p class="mt-2 text-sm text-marino-500">Tu cuenta está activa. Redirigiéndote...</p>
           }
           @case ('error') {
             <p class="text-lg font-bold text-marino-900">No pudimos verificar tu correo</p>
             <p class="mt-2 text-sm text-marino-500">{{ errorMessage() }}</p>
-            <a routerLink="/ingresar" class="btn-secondary mt-6 inline-flex">Ir a iniciar sesion</a>
+            <a routerLink="/ingresar" class="btn-secondary mt-6 inline-flex">Ir a iniciar sesión</a>
           }
         }
       </div>
@@ -34,7 +34,7 @@ type VerifyState = 'loading' | 'success' | 'error';
 })
 export class VerifyEmailComponent implements OnInit {
   readonly state = signal<VerifyState>('loading');
-  readonly errorMessage = signal('El enlace no es valido o ya expiro. Solicita uno nuevo desde la pantalla de ingreso.');
+  readonly errorMessage = signal('El enlace no es válido o ya expiró. Solicita uno nuevo desde la pantalla de ingreso.');
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);

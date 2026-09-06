@@ -18,7 +18,7 @@ import { DIRECTOR_ROLES } from '../../core/models/user.model';
 
         <form class="mt-6 space-y-4" [formGroup]="form" (ngSubmit)="onSubmit()">
           <div>
-            <label class="mb-1 block text-sm font-medium text-marino-800">Correo electronico</label>
+            <label class="mb-1 block text-sm font-medium text-marino-800">Correo electrónico</label>
             <input
               type="email"
               formControlName="email"
@@ -27,12 +27,12 @@ import { DIRECTOR_ROLES } from '../../core/models/user.model';
               placeholder="correo@ejemplo.com"
             />
             @if (isInvalid('email')) {
-              <p class="field-error">Ingresa un correo valido.</p>
+              <p class="field-error">Ingresa un correo válido.</p>
             }
           </div>
 
           <div>
-            <label class="mb-1 block text-sm font-medium text-marino-800">Contrasena</label>
+            <label class="mb-1 block text-sm font-medium text-marino-800">Contraseña</label>
             <input
               type="password"
               formControlName="password"
@@ -41,7 +41,7 @@ import { DIRECTOR_ROLES } from '../../core/models/user.model';
               placeholder="********"
             />
             @if (isInvalid('password')) {
-              <p class="field-error">La contrasena es obligatoria.</p>
+              <p class="field-error">La contraseña es obligatoria.</p>
             }
           </div>
 
@@ -55,7 +55,7 @@ import { DIRECTOR_ROLES } from '../../core/models/user.model';
                   [disabled]="resending() || resent()"
                   (click)="onResendVerification()"
                 >
-                  {{ resent() ? 'Correo reenviado' : resending() ? 'Reenviando...' : 'Reenviar correo de verificacion' }}
+                  {{ resent() ? 'Correo reenviado' : resending() ? 'Reenviando...' : 'Reenviar correo de verificación' }}
                 </button>
               }
             </div>
@@ -67,8 +67,8 @@ import { DIRECTOR_ROLES } from '../../core/models/user.model';
         </form>
 
         <p class="mt-6 text-center text-sm text-marino-500">
-          ¿Aun no tienes cuenta?
-          <a routerLink="/registrarse" class="font-semibold text-naranja-600 hover:underline">Registrate aqui</a>
+          ¿Aún no tienes cuenta?
+          <a routerLink="/registrarse" class="font-semibold text-naranja-600 hover:underline">Regístrate aquí</a>
         </p>
       </div>
     </section>
@@ -124,7 +124,7 @@ export class LoginComponent {
       },
       error: (error: HttpErrorResponse) => {
         this.loading.set(false);
-        this.errorMessage.set(error.error?.message ?? 'No se pudo iniciar sesion. Intentalo nuevamente.');
+        this.errorMessage.set(error.error?.message ?? 'No se pudo iniciar sesión. Inténtalo nuevamente.');
         this.needsVerification.set(error.status === 403);
       },
     });

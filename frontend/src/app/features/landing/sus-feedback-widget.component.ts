@@ -9,16 +9,16 @@ interface SusQuestion {
 }
 
 const QUESTIONS: SusQuestion[] = [
-  { key: 'q1', text: 'Creo que usaria este sitio con frecuencia.' },
-  { key: 'q2', text: 'Encontre el sitio innecesariamente complejo.' },
-  { key: 'q3', text: 'Me parecio facil de usar.' },
-  { key: 'q4', text: 'Necesitaria ayuda de otra persona para usarlo.' },
-  { key: 'q5', text: 'Las funciones estan bien integradas.' },
-  { key: 'q6', text: 'Encontre demasiada inconsistencia en el sitio.' },
-  { key: 'q7', text: 'La mayoria de personas aprenderia a usarlo rapidamente.' },
-  { key: 'q8', text: 'Me parecio incomodo de usar.' },
-  { key: 'q9', text: 'Me senti seguro/a usando el sitio.' },
-  { key: 'q10', text: 'Necesite aprender muchas cosas antes de poder usarlo.' },
+  { key: 'q1', text: 'Creo que usaría este sitio con frecuencia.' },
+  { key: 'q2', text: 'Encontré el sitio innecesariamente complejo.' },
+  { key: 'q3', text: 'Me pareció fácil de usar.' },
+  { key: 'q4', text: 'Necesitaría ayuda de otra persona para usarlo.' },
+  { key: 'q5', text: 'Las funciones están bien integradas.' },
+  { key: 'q6', text: 'Encontré demasiada inconsistencia en el sitio.' },
+  { key: 'q7', text: 'La mayoría de personas aprendería a usarlo rápidamente.' },
+  { key: 'q8', text: 'Me pareció incómodo de usar.' },
+  { key: 'q9', text: 'Me sentí seguro/a usando el sitio.' },
+  { key: 'q10', text: 'Necesité aprender muchas cosas antes de poder usarlo.' },
 ];
 
 @Component({
@@ -29,11 +29,11 @@ const QUESTIONS: SusQuestion[] = [
     <div class="card">
       @if (submitted()) {
         <div class="py-6 text-center">
-          <p class="text-lg font-bold text-marino-900">¡Gracias por tu opinion!</p>
+          <p class="text-lg font-bold text-marino-900">¡Gracias por tu opinión!</p>
           <p class="mt-1 text-sm text-marino-500">Tus respuestas nos ayudan a mejorar la plataforma.</p>
         </div>
       } @else {
-        <h3 class="text-lg font-bold text-marino-900">Ayudanos a mejorar</h3>
+        <h3 class="text-lg font-bold text-marino-900">Ayúdanos a mejorar</h3>
         <p class="mt-1 text-sm text-marino-500">Califica tu experiencia en el sitio (1 = muy en desacuerdo, 5 = muy de acuerdo).</p>
 
         <form class="mt-5 space-y-4" [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -63,7 +63,7 @@ const QUESTIONS: SusQuestion[] = [
           }
 
           <button type="submit" class="btn-primary w-full" [disabled]="form.invalid || loading()">
-            {{ loading() ? 'Enviando...' : 'Enviar opinion' }}
+            {{ loading() ? 'Enviando...' : 'Enviar opinión' }}
           </button>
         </form>
       }
@@ -126,7 +126,7 @@ export class SusFeedbackWidgetComponent {
         },
         error: () => {
           this.loading.set(false);
-          this.errorMessage.set('No se pudo enviar tu opinion. Intentalo nuevamente.');
+          this.errorMessage.set('No se pudo enviar tu opinión. Inténtalo nuevamente.');
         },
       });
   }

@@ -8,20 +8,20 @@ const ACCENT_COLOR = '#f8621a';
 
 const STATUS_COPY: Record<ApplicationStatus, { title: string; body: string }> = {
   PENDIENTE: {
-    title: 'Hemos recibido tu postulacion',
-    body: 'Tu postulacion como voluntario/a fue registrada y esta pendiente de revision.',
+    title: 'Hemos recibido tu postulación',
+    body: 'Tu postulación como voluntario/a fue registrada y está pendiente de revisión.',
   },
   EN_REVISION: {
-    title: 'Tu postulacion esta en revision',
-    body: 'El equipo del area esta revisando tu postulacion. Te avisaremos en cuanto haya una decision.',
+    title: 'Tu postulación está en revisión',
+    body: 'El equipo del área está revisando tu postulación. Te avisaremos en cuanto haya una decisión.',
   },
   ACEPTADO: {
     title: 'Felicidades, fuiste aceptado/a',
-    body: 'Tu postulacion como voluntario/a de Qori Kallpa fue aceptada. Pronto nos pondremos en contacto contigo para los siguientes pasos.',
+    body: 'Tu postulación como voluntario/a de Qori Kallpa fue aceptada. Pronto nos pondremos en contacto contigo para los siguientes pasos.',
   },
   RECHAZADO: {
-    title: 'Actualizacion sobre tu postulacion',
-    body: 'Luego de revisar tu postulacion, en esta ocasion no continuaremos con el proceso.',
+    title: 'Actualización sobre tu postulación',
+    body: 'Luego de revisar tu postulación, en esta ocasión no continuaremos con el proceso.',
   },
 };
 
@@ -39,7 +39,7 @@ export class EmailService {
     this.frontendUrl = this.configService.get<string>('FRONTEND_URL', 'http://localhost:4200');
 
     if (!this.resend) {
-      this.logger.warn('RESEND_API_KEY no configurado: los correos no se enviaran (solo se registraran en el log).');
+      this.logger.warn('RESEND_API_KEY no configurado: los correos no se enviarán (solo se registrarán en el log).');
     }
   }
 
@@ -51,13 +51,13 @@ export class EmailService {
       subject: 'Verifica tu correo - Qori Kallpa',
       html: this.wrapTemplate(`
         <h1 style="color:${BRAND_COLOR};margin:0 0 16px;">Bienvenido/a a Qori Kallpa, ${this.escape(fullName)}</h1>
-        <p>Gracias por registrarte para postular como voluntario/a. Confirma tu correo electronico para activar tu cuenta.</p>
+        <p>Gracias por registrarte para postular como voluntario/a. Confirma tu correo electrónico para activar tu cuenta.</p>
         <p style="text-align:center;margin:32px 0;">
           <a href="${verifyUrl}" style="background:${ACCENT_COLOR};color:#ffffff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;">
             Verificar mi correo
           </a>
         </p>
-        <p style="font-size:13px;color:#667085;">Si el boton no funciona, copia y pega este enlace en tu navegador:<br>${verifyUrl}</p>
+        <p style="font-size:13px;color:#667085;">Si el botón no funciona, copia y pega este enlace en tu navegador:<br>${verifyUrl}</p>
         <p style="font-size:13px;color:#667085;">Este enlace expira en 24 horas.</p>
       `),
     });
@@ -86,7 +86,7 @@ export class EmailService {
                </div>`
             : ''
         }
-        <p style="font-size:13px;color:#667085;">Puedes revisar el estado de tu postulacion en cualquier momento desde "Mis postulaciones" en nuestro sitio.</p>
+        <p style="font-size:13px;color:#667085;">Puedes revisar el estado de tu postulación en cualquier momento desde "Mis postulaciones" en nuestro sitio.</p>
       `),
     });
   }
@@ -110,16 +110,21 @@ export class EmailService {
   }
 
   private wrapTemplate(innerHtml: string): string {
-    return `
-      <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;">
-        <div style="text-align:center;margin-bottom:24px;">
-          <span style="display:inline-block;background:${BRAND_COLOR};color:${ACCENT_COLOR};font-weight:800;border-radius:9999px;width:40px;height:40px;line-height:40px;">QK</span>
-          <div style="font-weight:700;color:${BRAND_COLOR};margin-top:8px;">Qori Kallpa</div>
+    return `<!doctype html>
+      <html lang="es">
+      <head><meta charset="utf-8"></head>
+      <body style="margin:0;">
+        <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;">
+          <div style="text-align:center;margin-bottom:24px;">
+            <span style="display:inline-block;background:${BRAND_COLOR};color:${ACCENT_COLOR};font-weight:800;border-radius:9999px;width:40px;height:40px;line-height:40px;">QK</span>
+            <div style="font-weight:700;color:${BRAND_COLOR};margin-top:8px;">Qori Kallpa</div>
+          </div>
+          ${innerHtml}
+          <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 16px;">
+          <p style="font-size:12px;color:#98a2b3;text-align:center;">Qori Kallpa - Voces con Poder</p>
         </div>
-        ${innerHtml}
-        <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 16px;">
-        <p style="font-size:12px;color:#98a2b3;text-align:center;">Qori Kallpa - Voces con Poder</p>
-      </div>
+      </body>
+      </html>
     `;
   }
 

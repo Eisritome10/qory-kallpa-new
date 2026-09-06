@@ -10,21 +10,21 @@ export class CreateApplicationDto {
   @IsEmail()
   email: string;
 
-  @Matches(/^[0-9+\s-]{6,15}$/, { message: 'El telefono no tiene un formato valido' })
+  @Matches(/^[0-9+\s-]{6,15}$/, { message: 'El teléfono no tiene un formato válido' })
   phone: string;
 
-  @Matches(/^[0-9A-Za-z]{6,12}$/, { message: 'El DNI/documento no tiene un formato valido' })
+  @Matches(/^[0-9A-Za-z]{6,12}$/, { message: 'El DNI/documento no tiene un formato válido' })
   dni: string;
 
   @Type(() => Date)
-  @IsDate({ message: 'La fecha de nacimiento no es valida' })
+  @IsDate({ message: 'La fecha de nacimiento no es válida' })
   birthDate: Date;
 
-  @IsEnum(AreaVoluntariado, { message: 'El area de voluntariado no es valida' })
+  @IsEnum(AreaVoluntariado, { message: 'El área de voluntariado no es válida' })
   area: AreaVoluntariado;
 
   @IsString()
-  @MinLength(20, { message: 'Cuentanos un poco mas sobre tu motivacion (minimo 20 caracteres)' })
+  @MinLength(20, { message: 'Cuéntanos un poco más sobre tu motivación (mínimo 20 caracteres)' })
   motivation: string;
 
   @IsString()

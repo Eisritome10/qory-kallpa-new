@@ -14,43 +14,43 @@ interface Area {
 
 const AREAS: Area[] = [
   {
-    name: 'Alianzas y Recaudacion',
-    description: 'Construimos alianzas estrategicas y gestionamos la recaudacion de fondos.',
+    name: 'Alianzas y Recaudación',
+    description: 'Construimos alianzas estratégicas y gestionamos la recaudación de fondos.',
     icon: 'M12 4.5v15m7.5-7.5h-15M8.25 8.25l7.5 7.5m0-7.5l-7.5 7.5',
   },
   {
-    name: 'Tecnologia y Sistemas',
-    description: 'Desarrollamos y mantenemos las herramientas digitales de la organizacion.',
+    name: 'Tecnología y Sistemas',
+    description: 'Desarrollamos y mantenemos las herramientas digitales de la organización.',
     icon: 'M9.75 17L15 20l-.75-3.5M14.25 7L9 4l.75 3.5M4 9l3.5-.75L4 5m16 4l-3.5-.75L20 5M4 15l3.5.75L4 19m16-4l-3.5.75L20 19',
   },
   {
-    name: 'Supervision de Proyectos',
-    description: 'Aseguramos la calidad y el impacto de cada proyecto en ejecucion.',
+    name: 'Supervisión de Proyectos',
+    description: 'Aseguramos la calidad y el impacto de cada proyecto en ejecución.',
     icon: 'M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
   },
   {
     name: 'Marketing',
-    description: 'Comunicacion, redes sociales y campanas para dar voz a nuestras causas.',
+    description: 'Comunicación, redes sociales y campañas para dar voz a nuestras causas.',
     icon: 'M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z',
   },
   {
     name: 'Eventos',
-    description: 'Planificacion y ejecucion de actividades que movilizan a la comunidad.',
+    description: 'Planificación y ejecución de actividades que movilizan a la comunidad.',
     icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
   },
   {
     name: 'Programas',
-    description: 'Diseno y ejecucion de programas sociales de impacto sostenible.',
+    description: 'Diseño y ejecución de programas sociales de impacto sostenible.',
     icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
   },
   {
-    name: 'Gestion Humana',
-    description: 'Acompanamos a cada voluntario/a desde su postulacion hasta su desarrollo.',
+    name: 'Gestión Humana',
+    description: 'Acompañamos a cada voluntario/a desde su postulación hasta su desarrollo.',
     icon: 'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6 0a4 4 0 10-4-4',
   },
 ];
 
-const ROTATING_WORDS = ['lenguas originarias', 'culturas ancestrales', 'comunidades indigenas', 'saberes ancestrales'];
+const ROTATING_WORDS = ['lenguas originarias', 'culturas ancestrales', 'comunidades indígenas', 'saberes ancestrales'];
 
 @Component({
   selector: 'app-landing',
@@ -89,7 +89,7 @@ const ROTATING_WORDS = ['lenguas originarias', 'culturas ancestrales', 'comunida
           </span>
         </p>
         <p appReveal [revealDelay]="200" class="mt-5 max-w-xl text-lg text-marino-300">
-          Impulsamos el voluntariado y la accion social para revitalizar las culturas originarias de America Latina.
+          Impulsamos el voluntariado y la acción social para revitalizar las culturas originarias de América Latina.
           Suma tu tiempo, tu talento o tu aporte a nuestra causa.
         </p>
         <div appReveal [revealDelay]="260" class="mt-8 flex flex-wrap gap-4">
@@ -110,16 +110,16 @@ const ROTATING_WORDS = ['lenguas originarias', 'culturas ancestrales', 'comunida
       </div>
     </section>
 
-    <!-- Mision y principios -->
+    <!-- Misión y principios -->
     <app-mission-section />
 
-    <!-- Areas -->
+    <!-- Áreas -->
     <section class="bg-gray-50 py-20">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div appReveal class="mx-auto max-w-2xl text-center">
-          <p class="text-sm font-bold uppercase tracking-widest text-naranja-600">Areas de voluntariado</p>
-          <h2 class="mt-2 text-3xl font-extrabold text-marino-900 sm:text-4xl">Elige donde poner tu energia</h2>
-          <p class="mt-3 text-marino-500">Siete areas funcionales trabajando juntas por nuestras comunidades.</p>
+          <p class="text-sm font-bold uppercase tracking-widest text-naranja-600">Áreas de voluntariado</p>
+          <h2 class="mt-2 text-3xl font-extrabold text-marino-900 sm:text-4xl">Elige dónde poner tu energía</h2>
+          <p class="mt-3 text-marino-500">Siete áreas funcionales trabajando juntas por nuestras comunidades.</p>
         </div>
 
         <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -144,21 +144,21 @@ const ROTATING_WORDS = ['lenguas originarias', 'culturas ancestrales', 'comunida
       <div class="relative mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 md:grid-cols-2 lg:px-8">
         <div appReveal>
           <p class="text-sm font-bold uppercase tracking-widest text-naranja-400">Donaciones</p>
-          <h2 class="mt-2 text-3xl font-extrabold sm:text-4xl">Tu donacion sostiene nuestros programas</h2>
+          <h2 class="mt-2 text-3xl font-extrabold sm:text-4xl">Tu donación sostiene nuestros programas</h2>
           <p class="mt-4 text-marino-200">
-            Con tu aporte financiamos materiales, movilidad y capacitacion para las y los voluntarios que
+            Con tu aporte financiamos materiales, movilidad y capacitación para las y los voluntarios que
             llevan adelante nuestros programas sociales.
           </p>
           <a href="mailto:donaciones@qorikallpa.org?subject=Quiero%20donar%20a%20Qori%20Kallpa" class="btn-primary mt-6 inline-flex">
-            Escribenos para donar
+            Escríbenos para donar
           </a>
         </div>
         <div appReveal [revealDelay]="120" class="card !bg-white/5 text-white ring-white/10">
-          <h3 class="text-lg font-bold">&iquest;Como se usan los fondos?</h3>
+          <h3 class="text-lg font-bold">¿Cómo se usan los fondos?</h3>
           <ul class="mt-4 space-y-3 text-sm text-marino-100">
             <li class="flex gap-2"><span class="text-naranja-400">&#9679;</span> Materiales para talleres comunitarios.</li>
-            <li class="flex gap-2"><span class="text-naranja-400">&#9679;</span> Movilidad de voluntarios/as a zonas de intervencion.</li>
-            <li class="flex gap-2"><span class="text-naranja-400">&#9679;</span> Capacitacion y certificacion de voluntarios/as.</li>
+            <li class="flex gap-2"><span class="text-naranja-400">&#9679;</span> Movilidad de voluntarios/as a zonas de intervención.</li>
+            <li class="flex gap-2"><span class="text-naranja-400">&#9679;</span> Capacitación y certificación de voluntarios/as.</li>
           </ul>
         </div>
       </div>
@@ -178,7 +178,7 @@ export class LandingComponent implements OnInit, OnDestroy {
     { value: 500, suffix: '+', label: 'Voluntarios formados' },
     { value: 40, suffix: '+', label: 'Programas ejecutados' },
     { value: 15, suffix: '+', label: 'Comunidades beneficiadas' },
-    { value: 7, suffix: '', label: 'Areas de accion' },
+    { value: 7, suffix: '', label: 'Áreas de acción' },
   ];
 
   readonly typedText = signal('');

@@ -8,20 +8,20 @@ export type AreaVoluntariado =
   | 'GESTION_HUMANA';
 
 export const AREA_LABELS: Record<AreaVoluntariado, string> = {
-  ALIANZAS_RECAUDACION: 'Alianzas y Recaudacion',
-  TECNOLOGIA_SISTEMAS: 'Tecnologia y Sistemas',
-  SUPERVISION_PROYECTOS: 'Supervision de Proyectos',
+  ALIANZAS_RECAUDACION: 'Alianzas y Recaudación',
+  TECNOLOGIA_SISTEMAS: 'Tecnología y Sistemas',
+  SUPERVISION_PROYECTOS: 'Supervisión de Proyectos',
   PROGRAMAS: 'Programas',
   EVENTOS: 'Eventos',
   MARKETING: 'Marketing',
-  GESTION_HUMANA: 'Gestion Humana',
+  GESTION_HUMANA: 'Gestión Humana',
 };
 
 export type ApplicationStatus = 'PENDIENTE' | 'EN_REVISION' | 'ACEPTADO' | 'RECHAZADO';
 
 export const STATUS_LABELS: Record<ApplicationStatus, string> = {
   PENDIENTE: 'Pendiente',
-  EN_REVISION: 'En revision',
+  EN_REVISION: 'En revisión',
   ACEPTADO: 'Aceptado',
   RECHAZADO: 'Rechazado',
 };

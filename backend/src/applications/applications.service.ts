@@ -74,7 +74,7 @@ export class ApplicationsService {
     } else {
       const area = DIRECTOR_AREA_MAP[user.role];
       if (!area) {
-        throw new ForbiddenException('Tu rol no tiene un area de voluntariado asignada');
+        throw new ForbiddenException('Tu rol no tiene un área de voluntariado asignada');
       }
       where.area = area;
     }
@@ -101,7 +101,7 @@ export class ApplicationsService {
     if (user.role !== Role.DIRECTOR_GENERAL) {
       const area = DIRECTOR_AREA_MAP[user.role];
       if (!area) {
-        throw new ForbiddenException('Tu rol no tiene un area de voluntariado asignada');
+        throw new ForbiddenException('Tu rol no tiene un área de voluntariado asignada');
       }
       where.area = area;
     }
@@ -137,7 +137,7 @@ export class ApplicationsService {
     });
 
     if (!application) {
-      throw new NotFoundException('Postulacion no encontrada');
+      throw new NotFoundException('Postulación no encontrada');
     }
 
     this.assertCanAccess(application, user);
@@ -153,7 +153,7 @@ export class ApplicationsService {
   async updateStatus(id: string, dto: UpdateStatusDto, user: AuthenticatedUser) {
     const application = await this.prisma.application.findUnique({ where: { id } });
     if (!application) {
-      throw new NotFoundException('Postulacion no encontrada');
+      throw new NotFoundException('Postulación no encontrada');
     }
 
     this.assertCanReview(application, user);
@@ -168,7 +168,7 @@ export class ApplicationsService {
     }
 
     if (dto.status === ApplicationStatus.RECHAZADO && !dto.feedback) {
-      throw new BadRequestException('Debes indicar un feedback al rechazar una postulacion');
+      throw new BadRequestException('Debes indicar un feedback al rechazar una postulación');
     }
 
     const updated = await this.prisma.application.update({
@@ -198,7 +198,7 @@ export class ApplicationsService {
   ) {
     if (user.role === Role.POSTULANTE) {
       if (application.postulanteId !== user.id) {
-        throw new ForbiddenException('No tienes acceso a esta postulacion');
+        throw new ForbiddenException('No tienes acceso a esta postulación');
       }
       return;
     }
@@ -210,7 +210,7 @@ export class ApplicationsService {
 
     const area = DIRECTOR_AREA_MAP[user.role];
     if (!area || area !== application.area) {
-      throw new ForbiddenException('No tienes acceso a postulaciones de esta area');
+      throw new ForbiddenException('No tienes acceso a postulaciones de esta área');
     }
   }
 }

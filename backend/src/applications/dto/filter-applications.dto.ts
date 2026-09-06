@@ -6,7 +6,7 @@ export class FilterApplicationsDto {
   @IsEnum(ApplicationStatus)
   status?: ApplicationStatus;
 
-  /** Solo tiene efecto para DIRECTOR_GENERAL; el resto de directores estan acotados a su area. */
+  /** Solo tiene efecto para DIRECTOR_GENERAL; el resto de directores están acotados a su área. */
   @IsOptional()
   @IsEnum(AreaVoluntariado)
   area?: AreaVoluntariado;

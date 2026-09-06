@@ -12,7 +12,7 @@ import { RouterLink } from '@angular/router';
         <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <div class="flex items-center gap-2">
-              <span class="flex h-9 w-9 items-center justify-center rounded-full bg-naranja-500 text-sm font-extrabold text-white">QK</span>
+              <img src="assets/logo-mark.png" alt="Qori Kallpa" class="h-9 w-9 rounded-full object-cover ring-1 ring-white/20" />
               <span class="text-lg font-bold text-white">Qori Kallpa</span>
             </div>
             <p class="mt-3 text-sm text-marino-300">

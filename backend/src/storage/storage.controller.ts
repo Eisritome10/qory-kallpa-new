@@ -12,8 +12,8 @@ import { pdfUploadOptions } from './pdf-upload.options';
 import { StorageService } from './storage.service';
 
 /**
- * Endpoint generico de subida de PDFs a Supabase Storage.
- * Usado por el frontend para subir el CV antes de enviar el formulario de postulacion,
+ * Endpoint genérico de subida de PDFs a Supabase Storage.
+ * Usado por el frontend para subir el CV antes de enviar el formulario de postulación,
  * y reutilizado internamente por ApplicationsService.
  */
 @UseGuards(JwtAuthGuard)

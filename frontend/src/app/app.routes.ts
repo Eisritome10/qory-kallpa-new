@@ -10,9 +10,11 @@ import { ProjectsSectionComponent } from './features/landing/projects-section.co
 import { AlliancesSectionComponent } from './features/landing/alliances-section.component';
 import { ApplicationFormComponent } from './features/postulacion/application-form.component';
 import { MyApplicationsComponent } from './features/mis-postulaciones/my-applications.component';
+import { PerfilComponent } from './features/perfil/perfil.component';
 import { ApplicationsListComponent } from './features/admin/applications-list/applications-list.component';
 import { ApplicationDetailComponent } from './features/admin/application-detail/application-detail.component';
 import { MetricsComponent } from './features/admin/metrics/metrics.component';
+import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 import { DIRECTOR_ROLES } from './core/models/user.model';
 
@@ -34,6 +36,7 @@ export const routes: Routes = [
         component: MyApplicationsComponent,
         canActivate: [roleGuard(['POSTULANTE'])],
       },
+      { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] },
     ],
   },
   {

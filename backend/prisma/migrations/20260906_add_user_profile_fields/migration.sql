@@ -1,0 +1,4 @@
+ALTER TABLE "users" ADD COLUMN "phone" TEXT;
+ALTER TABLE "users" ADD COLUMN "dni" TEXT;
+ALTER TABLE "users" ADD COLUMN "birthDate" TIMESTAMP(3);
+ALTER TABLE "users" ADD COLUMN "avatarUrl" TEXT;

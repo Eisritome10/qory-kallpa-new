@@ -7,6 +7,7 @@ import { ApplicationsModule } from './applications/applications.module';
 import { SusEvaluationModule } from './sus-evaluation/sus-evaluation.module';
 import { EmailModule } from './email/email.module';
 import { HealthModule } from './health/health.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { HealthModule } from './health/health.module';
     SusEvaluationModule,
     EmailModule,
     HealthModule,
+    UsersModule,
   ],
 })
 export class AppModule {}
