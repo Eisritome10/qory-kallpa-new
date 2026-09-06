@@ -20,9 +20,20 @@ import { ALLIANCES } from './data/alliances.data';
 
         <div class="marquee-track flex w-max gap-6">
           @for (alliance of doubledAlliances; track $index) {
-            <div class="flex h-20 w-56 flex-shrink-0 items-center justify-center rounded-xl bg-white px-6 text-center text-sm font-semibold text-marino-500 shadow-sm ring-1 ring-black/5">
-              {{ alliance.name }}
-            </div>
+            @if (alliance.url) {
+              <a
+                [href]="alliance.url"
+                target="_blank"
+                rel="noopener"
+                class="flex h-20 w-56 flex-shrink-0 items-center justify-center rounded-xl bg-white px-6 text-center text-sm font-semibold text-marino-500 shadow-sm ring-1 ring-black/5 transition hover:text-naranja-600 hover:shadow-md"
+              >
+                {{ alliance.name }}
+              </a>
+            } @else {
+              <div class="flex h-20 w-56 flex-shrink-0 items-center justify-center rounded-xl bg-white px-6 text-center text-sm font-semibold text-marino-500 shadow-sm ring-1 ring-black/5">
+                {{ alliance.name }}
+              </div>
+            }
           }
         </div>
       </div>

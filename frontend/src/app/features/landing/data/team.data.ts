@@ -47,8 +47,8 @@ export const FOUNDERS: TeamMember[] = [
 export const AREA_DIRECTORS: TeamMember[] = [
   {
     id: 'alianzas',
-    name: 'Nombre y Apellido',
-    role: 'Dirección de Alianzas y Recaudación',
+    name: 'Heidi Briyit Quispe Hinojosa',
+    role: 'Directora de Alianzas y Recaudación',
     category: 'Dirección de Área',
     bio: 'Comparte aquí su trayectoria y su rol construyendo alianzas estratégicas.',
     initials: 'NA',
@@ -102,8 +102,8 @@ export const AREA_DIRECTORS: TeamMember[] = [
   },
   {
     id: 'gestion-humana',
-    name: 'Nombre y Apellido',
-    role: 'Dirección de Gestión Humana',
+    name: 'Heidi Briyit Quispe Hinojosa',
+    role: 'Directora de Gestión Humana',
     category: 'Dirección de Área',
     bio: 'Comparte aquí su compromiso acompañando a cada voluntario/a de la ONG.',
     initials: 'NA',

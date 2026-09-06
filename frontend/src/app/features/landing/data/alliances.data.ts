@@ -1,12 +1,13 @@
 export interface Alliance {
   name: string;
+  url?: string;
 }
 
 /**
- * PLACEHOLDER: reemplaza con los nombres/logos reales de tus organizaciones aliadas.
+ * PLACEHOLDER: reemplaza las restantes con los nombres/logos reales de tus organizaciones aliadas.
  */
 export const ALLIANCES: Alliance[] = [
-  { name: 'Organización Aliada 1' },
+  { name: 'Voces Valientes', url: 'https://www.instagram.com/voces.valientes._/' },
   { name: 'Organización Aliada 2' },
   { name: 'Organización Aliada 3' },
   { name: 'Organización Aliada 4' },
