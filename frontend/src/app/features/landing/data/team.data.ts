@@ -6,11 +6,13 @@ export interface TeamMember {
   bio: string;
   initials: string;
   colorClass: string;
+  photoUrl?: string;
 }
 
 /**
  * PLACEHOLDER: los bios de fundadores y de direcciones de área aún deben completarse
- * con la información real de cada persona (y su foto, cuando esté disponible).
+ * con la información real de cada persona. Agrega "photoUrl" (ruta en /assets) cuando
+ * tengas la foto; si se omite, se muestra un avatar con las iniciales.
  */
 export const FOUNDERS: TeamMember[] = [
   {
@@ -54,11 +56,12 @@ export const AREA_DIRECTORS: TeamMember[] = [
   },
   {
     id: 'tecnologia',
-    name: 'Nombre y Apellido',
-    role: 'Dirección de Tecnología y Sistemas',
+    name: 'Emanuel Israel Rios Torres',
+    role: 'Director de Tecnología y Sistemas',
     category: 'Dirección de Área',
-    bio: 'Comparte aquí su experiencia liderando las herramientas digitales de la ONG.',
-    initials: 'NA',
+    bio: 'Líder de desarrollo de la plataforma web de Qori Kallpa y las herramientas digitales de la ONG.',
+    initials: 'ER',
+    photoUrl: 'assets/emanuel-rios.png',
     colorClass: 'bg-marino-700',
   },
   {

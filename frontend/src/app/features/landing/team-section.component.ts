@@ -49,9 +49,13 @@ import { AREA_DIRECTORS, FOUNDERS, TeamMember } from './data/team.data';
         (click)="openMember(member)"
       >
         <div class="flex h-full flex-col items-center justify-center gap-3 p-4 text-white" [ngClass]="member.colorClass">
-          <span class="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 text-xl font-extrabold ring-2 ring-white/40 sm:h-20 sm:w-20 sm:text-2xl">
-            {{ member.initials }}
-          </span>
+          @if (member.photoUrl) {
+            <img [src]="member.photoUrl" [alt]="member.name" class="h-16 w-16 rounded-full object-cover ring-2 ring-white/40 sm:h-20 sm:w-20" />
+          } @else {
+            <span class="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 text-xl font-extrabold ring-2 ring-white/40 sm:h-20 sm:w-20 sm:text-2xl">
+              {{ member.initials }}
+            </span>
+          }
           <div class="text-center">
             <p class="text-sm font-bold sm:text-base">{{ member.name }}</p>
             <p class="mt-1 text-xs font-medium text-white/80 sm:text-sm">{{ member.role }}</p>
@@ -77,9 +81,13 @@ import { AREA_DIRECTORS, FOUNDERS, TeamMember } from './data/team.data';
         <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl" (click)="$event.stopPropagation()">
           <div class="flex items-start justify-between">
             <div class="flex items-center gap-4">
-              <span class="flex h-14 w-14 items-center justify-center rounded-full text-lg font-extrabold text-white" [ngClass]="member.colorClass">
-                {{ member.initials }}
-              </span>
+              @if (member.photoUrl) {
+                <img [src]="member.photoUrl" [alt]="member.name" class="h-14 w-14 rounded-full object-cover" />
+              } @else {
+                <span class="flex h-14 w-14 items-center justify-center rounded-full text-lg font-extrabold text-white" [ngClass]="member.colorClass">
+                  {{ member.initials }}
+                </span>
+              }
               <div>
                 <p class="text-lg font-bold text-marino-900">{{ member.name }}</p>
                 <p class="text-sm font-semibold text-naranja-600">{{ member.role }}</p>
