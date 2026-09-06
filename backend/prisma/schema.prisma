@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  POSTULANTE
+  DIRECTOR_GENERAL
+  DIRECTOR_ALIANZAS_RECAUDACION
+  DIRECTOR_TECNOLOGIA_SISTEMAS
+  DIRECTOR_SUPERVISION_PROYECTOS
+  DIRECTOR_PROGRAMAS
+  DIRECTOR_EVENTOS
+  DIRECTOR_MARKETING
+  DIRECTOR_GESTION_HUMANA
+}
+
+/// Areas funcionales de Qori Kallpa, cada una a cargo de un Director/a de Area.
+enum AreaVoluntariado {
+  ALIANZAS_RECAUDACION
+  TECNOLOGIA_SISTEMAS
+  SUPERVISION_PROYECTOS
+  PROGRAMAS
+  EVENTOS
+  MARKETING
+  GESTION_HUMANA
+}
+
+enum ApplicationStatus {
+  PENDIENTE
+  EN_REVISION
+  ACEPTADO
+  RECHAZADO
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  fullName  String
+  role      Role     @default(POSTULANTE)
+  isActive  Boolean  @default(true)
+  isEmailVerified Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  applications         Application[]   @relation("PostulanteApplications")
+  reviewedApplications Application[]   @relation("ReviewerApplications")
+  susEvaluations       SusEvaluation[] @relation("EvaluatorSusEvaluations")
+
+  @@map("users")
+}
+
+model Application {
+  id           String            @id @default(uuid())
+  fullName     String
+  email        String
+  phone        String
+  dni          String
+  birthDate    DateTime
+  area         AreaVoluntariado
+  motivation   String
+  availability String
+  cvUrl        String
+  cvFileName   String
+  status       ApplicationStatus @default(PENDIENTE)
+  feedback     String?
+
+  postulanteId String
+  postulante   User   @relation("PostulanteApplications", fields: [postulanteId], references: [id])
+
+  reviewedById String?
+  reviewedBy   User?     @relation("ReviewerApplications", fields: [reviewedById], references: [id])
+  reviewedAt   DateTime?
+
+  susEvaluations SusEvaluation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([area])
+  @@index([status])
+  @@map("applications")
+}
+
+model SusEvaluation {
+  id             String   @id @default(uuid())
+  respondentName String?
+  applicationId  String?
+  application    Application? @relation(fields: [applicationId], references: [id])
+
+  q1  Int
+  q2  Int
+  q3  Int
+  q4  Int
+  q5  Int
+  q6  Int
+  q7  Int
+  q8  Int
+  q9  Int
+  q10 Int
+
+  score Float
+
+  evaluatedById String?
+  evaluatedBy   User?   @relation("EvaluatorSusEvaluations", fields: [evaluatedById], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@map("sus_evaluations")
+}

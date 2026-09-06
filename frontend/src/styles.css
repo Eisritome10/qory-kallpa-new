@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', system-ui, sans-serif;
+  background-color: #f7f8fa;
+  color: #0f2843;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-lg bg-naranja-500 px-6 py-3 font-semibold text-white shadow-sm transition hover:bg-naranja-600 focus:outline-none focus:ring-2 focus:ring-naranja-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-lg border-2 border-marino-700 bg-transparent px-6 py-3 font-semibold text-marino-800 transition hover:bg-marino-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-marino-500 focus:ring-offset-2;
+}
+
+.input-field {
+  @apply block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-marino-900 shadow-sm transition focus:border-marino-500 focus:outline-none focus:ring-2 focus:ring-marino-200;
+}
+
+.input-error {
+  @apply border-red-400 focus:border-red-500 focus:ring-red-200;
+}
+
+.field-error {
+  @apply mt-1 text-sm text-red-600;
+}
+
+.card {
+  @apply rounded-2xl bg-white p-6 shadow-md ring-1 ring-black/5;
+}

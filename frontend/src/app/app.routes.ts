@@ -1,0 +1,44 @@
+import { Routes } from '@angular/router';
+import { PublicLayoutComponent } from './shared/components/public-layout.component';
+import { AdminShellComponent } from './features/admin/shell/admin-shell.component';
+import { LandingComponent } from './features/landing/landing.component';
+import { LoginComponent } from './features/auth/login.component';
+import { RegisterComponent } from './features/auth/register.component';
+import { VerifyEmailComponent } from './features/auth/verify-email.component';
+import { ApplicationFormComponent } from './features/postulacion/application-form.component';
+import { MyApplicationsComponent } from './features/mis-postulaciones/my-applications.component';
+import { ApplicationsListComponent } from './features/admin/applications-list/applications-list.component';
+import { ApplicationDetailComponent } from './features/admin/application-detail/application-detail.component';
+import { MetricsComponent } from './features/admin/metrics/metrics.component';
+import { roleGuard } from './core/guards/role.guard';
+import { DIRECTOR_ROLES } from './core/models/user.model';
+
+export const routes: Routes = [
+  {
+    path: '',
+    component: PublicLayoutComponent,
+    children: [
+      { path: '', component: LandingComponent },
+      { path: 'ingresar', component: LoginComponent },
+      { path: 'registrarse', component: RegisterComponent },
+      { path: 'verificar-correo', component: VerifyEmailComponent },
+      { path: 'postular', component: ApplicationFormComponent, canActivate: [roleGuard(['POSTULANTE'])] },
+      {
+        path: 'mis-postulaciones',
+        component: MyApplicationsComponent,
+        canActivate: [roleGuard(['POSTULANTE'])],
+      },
+    ],
+  },
+  {
+    path: 'admin',
+    component: AdminShellComponent,
+    canActivate: [roleGuard(DIRECTOR_ROLES)],
+    children: [
+      { path: '', component: ApplicationsListComponent },
+      { path: 'postulaciones/:id', component: ApplicationDetailComponent },
+      { path: 'metricas', component: MetricsComponent },
+    ],
+  },
+  { path: '**', redirectTo: '' },
+];
