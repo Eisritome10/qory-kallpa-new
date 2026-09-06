@@ -1,12 +1,16 @@
 services:
   - type: web
-    name: qori-kallpa-backend
+    name: qori-kallpa-web
     runtime: node
     plan: starter
     region: oregon
     rootDir: backend
     buildCommand: npm install && npx prisma generate && npm run build
-    startCommand: npx prisma migrate deploy && npm run start:prod
+    # El build tambien se repite aqui: en este servicio, el artefacto compilado en el paso
+    # de build no siempre persistio hacia la instancia de arranque (dist/ esta en .gitignore,
+    # como corresponde). Repetirlo en el mismo comando de arranque garantiza que dist/main.js
+    # exista en el mismo filesystem que ejecuta la app.
+    startCommand: npm run build && npx prisma migrate deploy && npm run start:prod
     healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
