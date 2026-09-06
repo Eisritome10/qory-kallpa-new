@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { RevealOnScrollDirective } from '../../shared/directives/reveal-on-scroll.directive';
+import { StatCounterComponent } from '../../shared/components/stat-counter.component';
 import { SusFeedbackWidgetComponent } from './sus-feedback-widget.component';
+import { MissionSectionComponent } from './mission-section.component';
 
 interface Area {
   name: string;
@@ -47,52 +50,82 @@ const AREAS: Area[] = [
   },
 ];
 
+const ROTATING_WORDS = ['lenguas originarias', 'culturas ancestrales', 'comunidades indigenas', 'saberes ancestrales'];
+
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, RouterLink, SusFeedbackWidgetComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    RevealOnScrollDirective,
+    StatCounterComponent,
+    SusFeedbackWidgetComponent,
+    MissionSectionComponent,
+  ],
   template: `
     <!-- Hero -->
-    <section class="relative overflow-hidden bg-marino-900">
-      <div class="absolute inset-0 opacity-20" style="background: radial-gradient(circle at 20% 20%, #f8621a 0, transparent 40%), radial-gradient(circle at 80% 0%, #2c649f 0, transparent 40%);"></div>
-      <div class="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-        <p class="text-sm font-bold uppercase tracking-widest text-naranja-400">Qori Kallpa</p>
-        <h1 class="mt-3 max-w-2xl text-4xl font-extrabold text-white sm:text-5xl">Voces con Poder</h1>
-        <p class="mt-5 max-w-xl text-lg text-marino-200">
-          Impulsamos el voluntariado y la accion social para transformar comunidades. Suma tu tiempo,
-          tu talento o tu aporte a nuestra causa.
+    <section class="relative overflow-hidden bg-marino-950">
+      <div class="bg-dot-grid absolute inset-0"></div>
+      <div
+        class="pointer-events-none absolute inset-0 opacity-30"
+        style="background: radial-gradient(circle at 15% 20%, #f8621a 0, transparent 42%), radial-gradient(circle at 85% 0%, #2c649f 0, transparent 45%);"
+      ></div>
+      <span
+        class="pointer-events-none absolute -right-10 -top-10 select-none text-[16rem] font-extrabold leading-none text-white/[0.03] sm:text-[22rem]"
+        aria-hidden="true"
+        >QK</span
+      >
+
+      <div class="relative mx-auto max-w-7xl px-4 py-28 sm:px-6 lg:px-8">
+        <p appReveal class="text-sm font-bold uppercase tracking-widest text-naranja-400">Qori Kallpa &middot; Fuerza de Oro</p>
+        <h1 appReveal [revealDelay]="80" class="mt-3 max-w-3xl text-4xl font-extrabold leading-tight text-white sm:text-6xl">
+          Voces con Poder
+        </h1>
+        <p appReveal [revealDelay]="140" class="mt-5 flex flex-wrap items-baseline gap-x-2 text-xl font-semibold text-marino-200 sm:text-2xl">
+          <span>Rescatamos</span>
+          <span class="text-naranja-400">
+            {{ typedText() }}<span class="typewriter-cursor h-6 align-middle sm:h-7"></span>
+          </span>
         </p>
-        <div class="mt-8 flex flex-wrap gap-4">
-          <a routerLink="/postular" class="btn-primary">Postula como voluntario/a</a>
-          <a href="#donar" class="btn-secondary !border-white !text-white hover:!bg-white hover:!text-marino-900">Quiero donar</a>
+        <p appReveal [revealDelay]="200" class="mt-5 max-w-xl text-lg text-marino-300">
+          Impulsamos el voluntariado y la accion social para revitalizar las culturas originarias de America Latina.
+          Suma tu tiempo, tu talento o tu aporte a nuestra causa.
+        </p>
+        <div appReveal [revealDelay]="260" class="mt-8 flex flex-wrap gap-4">
+          <a routerLink="/postular" class="btn-primary shadow-lg shadow-naranja-500/20">Postula como voluntario/a</a>
+          <a href="#donar" class="btn-secondary !border-white/30 !text-white hover:!bg-white hover:!text-marino-900">Quiero donar</a>
+        </div>
+
+        <div appReveal [revealDelay]="320" class="mt-16 grid grid-cols-2 gap-6 border-t border-white/10 pt-10 sm:grid-cols-4">
+          @for (stat of stats; track stat.label) {
+            <div>
+              <p class="text-3xl font-extrabold text-white sm:text-4xl">
+                <app-stat-counter [target]="stat.value" [suffix]="stat.suffix" />
+              </p>
+              <p class="mt-1 text-sm text-marino-300">{{ stat.label }}</p>
+            </div>
+          }
         </div>
       </div>
     </section>
 
-    <!-- Impacto -->
-    <section class="bg-white">
-      <div class="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 py-14 sm:px-6 md:grid-cols-4 lg:px-8">
-        @for (stat of stats; track stat.label) {
-          <div class="text-center">
-            <p class="text-3xl font-extrabold text-marino-800">{{ stat.value }}</p>
-            <p class="mt-1 text-sm text-marino-500">{{ stat.label }}</p>
-          </div>
-        }
-      </div>
-    </section>
+    <!-- Mision y principios -->
+    <app-mission-section />
 
     <!-- Areas -->
-    <section class="bg-gray-50 py-16">
+    <section class="bg-gray-50 py-20">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl text-center">
-          <h2 class="text-3xl font-extrabold text-marino-900">Areas de voluntariado</h2>
-          <p class="mt-3 text-marino-500">Elige el area donde quieres poner tu energia al servicio de la comunidad.</p>
+        <div appReveal class="mx-auto max-w-2xl text-center">
+          <p class="text-sm font-bold uppercase tracking-widest text-naranja-600">Areas de voluntariado</p>
+          <h2 class="mt-2 text-3xl font-extrabold text-marino-900 sm:text-4xl">Elige donde poner tu energia</h2>
+          <p class="mt-3 text-marino-500">Siete areas funcionales trabajando juntas por nuestras comunidades.</p>
         </div>
 
         <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          @for (area of areas; track area.name) {
-            <div class="card flex flex-col items-start">
-              <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-naranja-50 text-naranja-600">
+          @for (area of areas; track area.name; let i = $index) {
+            <div appReveal [revealDelay]="i * 60" class="card flex flex-col items-start transition hover:-translate-y-1 hover:shadow-xl">
+              <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-naranja-50 text-naranja-600 transition group-hover:scale-110">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="area.icon" />
                 </svg>
@@ -106,10 +139,12 @@ const AREAS: Area[] = [
     </section>
 
     <!-- Donaciones -->
-    <section id="donar" class="bg-marino-800 py-16 text-white">
-      <div class="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 md:grid-cols-2 lg:px-8">
-        <div>
-          <h2 class="text-3xl font-extrabold">Tu donacion sostiene nuestros programas</h2>
+    <section id="donar" class="relative overflow-hidden bg-marino-800 py-20 text-white">
+      <span class="pointer-events-none absolute -bottom-16 -left-16 select-none text-[14rem] font-extrabold leading-none text-white/[0.04]" aria-hidden="true">QK</span>
+      <div class="relative mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 md:grid-cols-2 lg:px-8">
+        <div appReveal>
+          <p class="text-sm font-bold uppercase tracking-widest text-naranja-400">Donaciones</p>
+          <h2 class="mt-2 text-3xl font-extrabold sm:text-4xl">Tu donacion sostiene nuestros programas</h2>
           <p class="mt-4 text-marino-200">
             Con tu aporte financiamos materiales, movilidad y capacitacion para las y los voluntarios que
             llevan adelante nuestros programas sociales.
@@ -118,31 +153,62 @@ const AREAS: Area[] = [
             Escribenos para donar
           </a>
         </div>
-        <div class="card !bg-white/5 text-white ring-white/10">
-          <h3 class="text-lg font-bold">¿Como se usan los fondos?</h3>
+        <div appReveal [revealDelay]="120" class="card !bg-white/5 text-white ring-white/10">
+          <h3 class="text-lg font-bold">&iquest;Como se usan los fondos?</h3>
           <ul class="mt-4 space-y-3 text-sm text-marino-100">
-            <li class="flex gap-2"><span class="text-naranja-400">●</span> Materiales para talleres comunitarios.</li>
-            <li class="flex gap-2"><span class="text-naranja-400">●</span> Movilidad de voluntarios/as a zonas de intervencion.</li>
-            <li class="flex gap-2"><span class="text-naranja-400">●</span> Capacitacion y certificacion de voluntarios/as.</li>
+            <li class="flex gap-2"><span class="text-naranja-400">&#9679;</span> Materiales para talleres comunitarios.</li>
+            <li class="flex gap-2"><span class="text-naranja-400">&#9679;</span> Movilidad de voluntarios/as a zonas de intervencion.</li>
+            <li class="flex gap-2"><span class="text-naranja-400">&#9679;</span> Capacitacion y certificacion de voluntarios/as.</li>
           </ul>
         </div>
       </div>
     </section>
 
     <!-- Encuesta de usabilidad -->
-    <section class="bg-gray-50 py-16">
-      <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+    <section class="bg-gray-50 py-20">
+      <div appReveal class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <app-sus-feedback-widget />
       </div>
     </section>
   `,
 })
-export class LandingComponent {
+export class LandingComponent implements OnInit, OnDestroy {
   readonly areas = AREAS;
   readonly stats = [
-    { value: '+500', label: 'Voluntarios formados' },
-    { value: '+40', label: 'Programas ejecutados' },
-    { value: '+15', label: 'Comunidades beneficiadas' },
-    { value: '7', label: 'Areas de accion' },
+    { value: 500, suffix: '+', label: 'Voluntarios formados' },
+    { value: 40, suffix: '+', label: 'Programas ejecutados' },
+    { value: 15, suffix: '+', label: 'Comunidades beneficiadas' },
+    { value: 7, suffix: '', label: 'Areas de accion' },
   ];
+
+  readonly typedText = signal('');
+
+  private timeoutId?: ReturnType<typeof setTimeout>;
+
+  ngOnInit(): void {
+    this.runTypewriter(0, 0, false);
+  }
+
+  ngOnDestroy(): void {
+    if (this.timeoutId) clearTimeout(this.timeoutId);
+  }
+
+  private runTypewriter(wordIndex: number, charIndex: number, deleting: boolean): void {
+    const word = ROTATING_WORDS[wordIndex];
+    this.typedText.set(word.slice(0, charIndex));
+
+    if (!deleting && charIndex === word.length) {
+      this.timeoutId = setTimeout(() => this.runTypewriter(wordIndex, charIndex, true), 1600);
+      return;
+    }
+
+    if (deleting && charIndex === 0) {
+      const nextWordIndex = (wordIndex + 1) % ROTATING_WORDS.length;
+      this.timeoutId = setTimeout(() => this.runTypewriter(nextWordIndex, 0, false), 300);
+      return;
+    }
+
+    const nextCharIndex = deleting ? charIndex - 1 : charIndex + 1;
+    this.timeoutId = setTimeout(() => this.runTypewriter(wordIndex, nextCharIndex, deleting), deleting ? 35 : 60);
+  }
 }

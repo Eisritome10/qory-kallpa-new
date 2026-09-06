@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { ROLE_LABELS } from '../../core/models/user.model';
@@ -9,7 +9,10 @@ import { ROLE_LABELS } from '../../core/models/user.model';
   standalone: true,
   imports: [CommonModule, RouterLink, RouterLinkActive],
   template: `
-    <header class="sticky top-0 z-40 border-b border-marino-800/10 bg-white/95 backdrop-blur">
+    <header
+      class="sticky top-0 z-40 border-b bg-white/95 backdrop-blur transition-shadow"
+      [ngClass]="scrolled() ? 'border-transparent shadow-sm' : 'border-marino-800/10'"
+    >
       <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <a routerLink="/" class="flex items-center gap-2">
           <span
@@ -35,6 +38,29 @@ import { ROLE_LABELS } from '../../core/models/user.model';
 
         <div class="hidden items-center gap-6 sm:flex">
           <a routerLink="/" routerLinkActive="text-naranja-600" [routerLinkActiveOptions]="{ exact: true }" class="text-sm font-semibold text-marino-800 hover:text-naranja-600">Inicio</a>
+
+          <div class="relative">
+            <button
+              type="button"
+              class="flex items-center gap-1 text-sm font-semibold text-marino-800 hover:text-naranja-600"
+              [class.text-naranja-600]="aboutOpen()"
+              (click)="aboutOpen.set(!aboutOpen())"
+            >
+              Nosotros
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 transition-transform" [class.rotate-180]="aboutOpen()" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            @if (aboutOpen()) {
+              <div class="absolute left-0 top-full mt-2 w-48 rounded-xl bg-white p-2 shadow-lg ring-1 ring-black/5">
+                <a routerLink="/equipo" (click)="aboutOpen.set(false)" class="block rounded-lg px-3 py-2 text-sm font-medium text-marino-700 hover:bg-marino-50">Equipo</a>
+                <a routerLink="/proyectos" (click)="aboutOpen.set(false)" class="block rounded-lg px-3 py-2 text-sm font-medium text-marino-700 hover:bg-marino-50">Proyectos</a>
+                <a routerLink="/alianzas" (click)="aboutOpen.set(false)" class="block rounded-lg px-3 py-2 text-sm font-medium text-marino-700 hover:bg-marino-50">Alianzas</a>
+              </div>
+            }
+          </div>
+
           <a routerLink="/postular" routerLinkActive="text-naranja-600" class="text-sm font-semibold text-marino-800 hover:text-naranja-600">Postular</a>
 
           @if (auth.currentUser()?.role === 'POSTULANTE') {
@@ -62,6 +88,12 @@ import { ROLE_LABELS } from '../../core/models/user.model';
       @if (mobileOpen()) {
         <div class="space-y-1 border-t border-marino-100 px-4 py-3 sm:hidden">
           <a routerLink="/" (click)="mobileOpen.set(false)" class="block rounded-md px-3 py-2 text-sm font-semibold text-marino-800 hover:bg-marino-50">Inicio</a>
+
+          <p class="px-3 pt-2 text-xs font-semibold uppercase tracking-wide text-marino-400">Nosotros</p>
+          <a routerLink="/equipo" (click)="mobileOpen.set(false)" class="block rounded-md px-3 py-2 text-sm font-semibold text-marino-800 hover:bg-marino-50">Equipo</a>
+          <a routerLink="/proyectos" (click)="mobileOpen.set(false)" class="block rounded-md px-3 py-2 text-sm font-semibold text-marino-800 hover:bg-marino-50">Proyectos</a>
+          <a routerLink="/alianzas" (click)="mobileOpen.set(false)" class="block rounded-md px-3 py-2 text-sm font-semibold text-marino-800 hover:bg-marino-50">Alianzas</a>
+
           <a routerLink="/postular" (click)="mobileOpen.set(false)" class="block rounded-md px-3 py-2 text-sm font-semibold text-marino-800 hover:bg-marino-50">Postular</a>
           @if (auth.currentUser()?.role === 'POSTULANTE') {
             <a routerLink="/mis-postulaciones" (click)="mobileOpen.set(false)" class="block rounded-md px-3 py-2 text-sm font-semibold text-marino-800 hover:bg-marino-50">Mis postulaciones</a>
@@ -81,8 +113,29 @@ import { ROLE_LABELS } from '../../core/models/user.model';
 })
 export class NavbarComponent {
   readonly mobileOpen = signal(false);
+  readonly scrolled = signal(false);
+  readonly aboutOpen = signal(false);
+
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
 
   constructor(public readonly auth: AuthService) {}
+
+  @HostListener('window:scroll')
+  onWindowScroll(): void {
+    this.scrolled.set(window.scrollY > 8);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (this.aboutOpen() && !this.elementRef.nativeElement.contains(event.target as Node)) {
+      this.aboutOpen.set(false);
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    this.aboutOpen.set(false);
+  }
 
   roleLabel(): string {
     const role = this.auth.currentUser()?.role;

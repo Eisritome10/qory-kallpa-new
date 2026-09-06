@@ -39,3 +39,58 @@ body {
 .card {
   @apply rounded-2xl bg-white p-6 shadow-md ring-1 ring-black/5;
 }
+
+/* Reveal-on-scroll: estado inicial oculto, animado por RevealOnScrollDirective */
+[appReveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+[appReveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Cursor parpadeante del efecto typewriter en el hero */
+.typewriter-cursor {
+  display: inline-block;
+  width: 3px;
+  margin-left: 2px;
+  background: currentColor;
+  animation: blink 0.9s step-end infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Franja de logos de aliados con desplazamiento continuo */
+.marquee-track {
+  animation: marquee 28s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Textura sutil de puntos para fondos oscuros (hero, secciones destacadas) */
+.bg-dot-grid {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+  background-size: 22px 22px;
+}

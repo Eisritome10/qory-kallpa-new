@@ -5,6 +5,9 @@ import { LandingComponent } from './features/landing/landing.component';
 import { LoginComponent } from './features/auth/login.component';
 import { RegisterComponent } from './features/auth/register.component';
 import { VerifyEmailComponent } from './features/auth/verify-email.component';
+import { TeamSectionComponent } from './features/landing/team-section.component';
+import { ProjectsSectionComponent } from './features/landing/projects-section.component';
+import { AlliancesSectionComponent } from './features/landing/alliances-section.component';
 import { ApplicationFormComponent } from './features/postulacion/application-form.component';
 import { MyApplicationsComponent } from './features/mis-postulaciones/my-applications.component';
 import { ApplicationsListComponent } from './features/admin/applications-list/applications-list.component';
@@ -22,6 +25,9 @@ export const routes: Routes = [
       { path: 'ingresar', component: LoginComponent },
       { path: 'registrarse', component: RegisterComponent },
       { path: 'verificar-correo', component: VerifyEmailComponent },
+      { path: 'equipo', component: TeamSectionComponent },
+      { path: 'proyectos', component: ProjectsSectionComponent },
+      { path: 'alianzas', component: AlliancesSectionComponent },
       { path: 'postular', component: ApplicationFormComponent, canActivate: [roleGuard(['POSTULANTE'])] },
       {
         path: 'mis-postulaciones',
