@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "API de gestion de voluntariado para la ONG Qori Kallpa",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "build": "nest build",
     "start": "nest start",

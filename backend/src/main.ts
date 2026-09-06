@@ -7,12 +7,20 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
+  // FRONTEND_URL: dominio principal del frontend (ej. https://www.qorikallpa.org o tu URL de Vercel).
+  // CORS_EXTRA_ORIGINS: origenes adicionales separados por coma (ej. previews de Vercel).
+  const extraOrigins = configService
+    .get<string>('CORS_EXTRA_ORIGINS', '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
   const allowedOrigins = [
-    'https://www.qorikallpa.org',
-    'https://qorikallpa.org',
     'http://localhost:4200',
     'http://127.0.0.1:4200',
-  ];
+    configService.get<string>('FRONTEND_URL', ''),
+    ...extraOrigins,
+  ].filter(Boolean);
 
   app.enableCors({
     origin: allowedOrigins,

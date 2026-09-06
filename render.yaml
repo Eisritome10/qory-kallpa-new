@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: qori-kallpa-backend
+    runtime: node
+    plan: starter
+    region: oregon
+    rootDir: backend
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npx prisma migrate deploy && npm run start:prod
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 8h
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_CV_BUCKET
+        value: cv-postulantes
+      - key: FRONTEND_URL
+        sync: false
+      - key: CORS_EXTRA_ORIGINS
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        value: "Qori Kallpa <onboarding@resend.dev>"
+      - key: PORT
+        value: 3000
